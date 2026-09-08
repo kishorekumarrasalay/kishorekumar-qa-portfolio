@@ -57,7 +57,7 @@ export default function QaSandbox() {
     );
     const foundBug = bugs.find((b) => b.id === bugId);
     if (foundBug) {
-      setBugToast(`🎯 Defect Identified: "${foundBug.title}" logged to Jira Kanban board!`);
+      setBugToast(`🎯 Defect Identified: "${foundBug.title}" logged to Bug Tracker (Google Sheets)!`);
       setTimeout(() => setBugToast(null), 4000);
     }
   };
@@ -300,7 +300,7 @@ export default function QaSandbox() {
                 {/* Manual Bug Report Input */}
                 <form onSubmit={handleCustomBugSubmit} className="pt-2 border-t border-card-border/50">
                   <label className="block text-[11px] sm:text-xs font-semibold text-muted mb-1.5">
-                    Log a New Custom Defect to Jira:
+                    Log a New Custom Defect to Google Sheets:
                   </label>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <input
@@ -321,12 +321,12 @@ export default function QaSandbox() {
               </div>
             </div>
 
-            {/* Jira-style Kanban Board */}
+            {/* Google Sheets Defect Tracker */}
             <div className="lg:col-span-5 flex flex-col rounded-2xl border border-card-border bg-card p-5 shadow-lg">
               <div className="flex items-center justify-between border-b border-card-border/60 pb-3">
                 <div className="flex items-center gap-2">
                   <Layers size={18} className="text-primary-light" />
-                  <h4 className="font-heading text-base font-bold">Jira Bug Tracker</h4>
+                  <h4 className="font-heading text-base font-bold">Bug Tracker (Google Sheets)</h4>
                 </div>
                 <span className="text-xs font-semibold text-muted bg-muted/10 px-2.5 py-0.5 rounded-full">
                   {bugs.length} Defects Tracked

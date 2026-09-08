@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 
+export type ModuleTested = {
+  name: string;
+  description: string;
+};
+
 export type CaseStudy = {
   slug: string;
   title: string;
@@ -10,6 +15,7 @@ export type CaseStudy = {
     role: string;
   };
   testingScope: string[];
+  modulesTested?: ModuleTested[];
   approach: {
     design: string;
     tools: string[];
@@ -44,7 +50,7 @@ export const caseStudies: CaseStudy[] = [
     context: {
       product:
         "HiKode is a job application and professional networking web platform used by candidates and recruiters.",
-      role: "Quality Analyst — functional, regression, smoke, sanity, and exploratory testing; bug tracking in Jira.",
+      role: "Quality Analyst — functional, regression, smoke, sanity, and exploratory testing; bug tracking in Google Sheets.",
     },
     testingScope: [
       "Functional testing of auth, profiles, and job flows",
@@ -54,8 +60,8 @@ export const caseStudies: CaseStudy[] = [
     ],
     approach: {
       design:
-        "Wrote structured test cases from user stories, prioritized critical paths (login, apply, messaging), and logged defects with clear repro steps in Jira.",
-      tools: ["Jira", "Postman", "Chrome DevTools", "Google Sheets"],
+        "Wrote structured test cases from user stories, prioritized critical paths (login, apply, messaging), and logged defects with clear repro steps in Google Sheets.",
+      tools: ["Google Sheets", "Postman", "Chrome DevTools"],
     },
     sampleArtifacts: {
       testCases: [
@@ -103,7 +109,7 @@ export const caseStudies: CaseStudy[] = [
     context: {
       product:
         "NSO — Belgian Waffle is a supply chain management web application used for order and inventory workflows.",
-      role: "Quality Analyst — functional, regression, and sanity testing with Jira defect tracking.",
+      role: "Quality Analyst — functional, regression, and sanity testing with Google Sheets defect tracking.",
     },
     testingScope: [
       "Order and inventory workflows",
@@ -111,10 +117,32 @@ export const caseStudies: CaseStudy[] = [
       "Sanity checks on critical modules",
       "UI consistency and permission-related paths",
     ],
+    modulesTested: [
+      {
+        name: "Store Creation",
+        description:
+          "Tested store setup workflows, store metadata configuration, branch onboarding parameters, and location mappings to ensure accurate store initialization across the supply chain network.",
+      },
+      {
+        name: "Middleware",
+        description:
+          "Tested data synchronization, API integration endpoints, background event payload processing, and data flow validation between store POS terminals and central inventory systems.",
+      },
+      {
+        name: "Invoice Application",
+        description:
+          "Tested billing calculations, GST and tax breakdowns, promotional discount application formulas, invoice state management, and document export accuracy.",
+      },
+      {
+        name: "Indent & Entries",
+        description:
+          "Tested purchase requisition flows including Local Purchase and Company Purchase modules, wastage logging entries, and inventory return processing with automated stock balance updates.",
+      },
+    ],
     approach: {
       design:
         "Mapped business flows into checklists and test cases; validated happy paths and negative cases for status transitions.",
-      tools: ["Jira", "Excel / Google Sheets", "Chrome DevTools"],
+      tools: ["Google Sheets", "Chrome DevTools"],
     },
     sampleArtifacts: {
       testCases: [

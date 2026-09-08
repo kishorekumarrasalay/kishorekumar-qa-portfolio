@@ -112,7 +112,7 @@ const RESPONSES: Record<string, () => QaMessage> = {
     ),
   manual: () =>
     reply(
-      `Manual testing is Kishore's core expertise. He executes functional, regression, smoke, sanity, and exploratory testing across live web platforms, logging defects with full step-by-step documentation in Jira.`,
+      `Manual testing is Kishore's core expertise. He executes functional, regression, smoke, sanity, and exploratory testing across live web platforms, logging defects with full step-by-step documentation in Google Sheets.`,
       {
         links: [
           { label: "🐞 Live Bug Hunt", href: "#qa-sandbox" },
@@ -135,7 +135,7 @@ const RESPONSES: Record<string, () => QaMessage> = {
       .find((c) => c.id === "learning")
       ?.items.join(", ");
     return reply(
-      `Kishore's core QA toolkit:\n\n• Manual Testing (Functional, Regression, Smoke, Sanity, Exploratory)\n• Automation: Playwright with TypeScript (Page Object Model)\n• API Testing: Postman, REST & SOAP, JSONPath, Auth types\n• Database: SQL (basic queries)\n• Tools: Jira, Git & GitHub, Excel / Google Sheets\n\nCurrently upskilling in: ${learning}`,
+      `Kishore's core QA toolkit:\n\n• Manual Testing (Functional, Regression, Smoke, Sanity, Exploratory)\n• Automation: Playwright with TypeScript (Page Object Model)\n• API Testing: Postman, REST & SOAP, JSONPath, Auth types\n• Database: SQL (basic queries)\n• Tools: Google Sheets (Bug Tracking), Git & GitHub, Excel\n\nCurrently upskilling in: ${learning}`,
       { links: [{ label: "View Skills", href: "#skills" }] }
     );
   },
@@ -206,8 +206,8 @@ const RESPONSES: Record<string, () => QaMessage> = {
     ),
   jira: () =>
     reply(
-      `Kishore uses Jira daily for defect lifecycle management — writing detailed bug reports (Steps to reproduce, Expected vs Actual, Severity, Screenshots) and maintaining sprint test backlogs.`,
-      { links: [{ label: "🐞 Try Jira Defect Board", href: "#qa-sandbox" }] }
+      `Kishore uses Google Sheets daily for defect lifecycle management — writing detailed bug reports (Steps to reproduce, Expected vs Actual, Severity, Screenshots) and maintaining test logs.`,
+      { links: [{ label: "🐞 Try Defect Tracker (Google Sheets)", href: "#qa-sandbox" }] }
     ),
   linkedin: () =>
     reply(`LinkedIn Profile: ${social.linkedin}`, {

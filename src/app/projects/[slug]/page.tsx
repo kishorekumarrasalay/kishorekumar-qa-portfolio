@@ -61,6 +61,27 @@ export default async function CaseStudyPage({ params }: Props) {
         </ul>
       </section>
 
+      {study.modulesTested && study.modulesTested.length > 0 && (
+        <section className="mt-10">
+          <h2 className="font-heading text-xl font-semibold">Modules Tested</h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {study.modulesTested.map((moduleItem) => (
+              <div
+                key={moduleItem.name}
+                className="rounded-xl border border-card-border bg-card p-4 sm:p-5"
+              >
+                <h3 className="font-heading text-base font-semibold text-foreground">
+                  {moduleItem.name}
+                </h3>
+                <p className="text-body mt-2 text-sm text-muted">
+                  {moduleItem.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="mt-10">
         <h2 className="font-heading text-xl font-semibold">Approach</h2>
         <p className="text-body mt-3 text-sm text-muted">{study.approach.design}</p>

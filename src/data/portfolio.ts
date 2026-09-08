@@ -15,6 +15,13 @@
  * =============================================================================
  */
 
+export function getMonthsExperience(startDateStr = "2026-03-18"): number {
+  const start = new Date(startDateStr);
+  const now = new Date();
+  const diffInDays = (now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+  return Math.max(1, Math.round(diffInDays / 30.4375));
+}
+
 export const portfolioData = {
   // ----- Site-wide (name, logo, SEO, footer) -----
   site: {
@@ -70,10 +77,10 @@ export const portfolioData = {
   // ----- Metrics band (below hero) — edit values here -----
   metrics: {
     items: [
-      { label: "Bugs logged", value: 180, suffix: "+", prefix: "" },
+      { label: "Bugs logged", value: 70, suffix: "+", prefix: "" },
       { label: "Test cases written", value: 150, suffix: "+", prefix: "" },
       { label: "Products tested", value: 2, suffix: "", prefix: "" },
-      { label: "Months experience", value: 3, suffix: "", prefix: "" },
+      { label: "Months experience", value: getMonthsExperience("2026-03-18"), suffix: "", prefix: "" },
     ],
   },
 
@@ -83,7 +90,7 @@ export const portfolioData = {
     whoIAm: {
       title: "Who I Am",
       paragraphs: [
-        "I began my QA journey as an intern and grew into a full-time Quality Analyst role, now contributing across two live products spanning web platforms. I specialize in manual testing — functional, regression, smoke, sanity, and exploratory — combined with structured bug tracking in Jira and clear test documentation.",
+        "I began my QA journey as an intern and grew into a full-time Quality Analyst role, now contributing across two live products spanning web platforms. I specialize in manual testing — functional, regression, smoke, sanity, and exploratory — combined with structured bug tracking in Google Sheets and clear test documentation.",
         "I'm actively expanding my skill set into API testing with Postman and automation with Playwright and TypeScript, working toward a long-term goal of becoming an SDET.",
       ],
     },
@@ -123,7 +130,7 @@ export const portfolioData = {
           company: "Ratnam Solutions Private Limited",
           period: "Jun 2026 – Present",
           description:
-            "Performing manual testing (functional, regression, smoke, sanity, exploratory) and API testing across HiKode and NSO — Belgian Waffle — web platforms. Managing bug tracking and test documentation in Jira.",
+            "Performing manual testing (functional, regression, smoke, sanity, exploratory) and API testing across HiKode and NSO — Belgian Waffle — web platforms. Managing bug tracking and test documentation in Google Sheets.",
         },
         {
           title: "Quality Analyst Intern",
@@ -196,7 +203,7 @@ export const portfolioData = {
         colSpan: 1,
         rowSpan: 1,
         items: [
-          "Jira",
+          "Google Sheets (Bug Tracking)",
           "Postman",
           "Playwright",
           "Git & GitHub",
@@ -242,7 +249,7 @@ export const portfolioData = {
         title: "NSO — Belgian Waffle",
         slug: "nso-belgian-waffle",
         description:
-          "Supply Chain Management web application. Focused on functional, regression, and sanity testing.",
+          "Supply Chain Management web application for Belgian Waffle Co. Own testing across the Store Creation, Middleware, and Invoice modules — plus Indent and Entries (Local/Company Purchase, Wastage, Return). Functional, regression, and sanity testing with test cases and defect tracking in Google Sheets.",
         tag: "Web",
       },
     ],
