@@ -153,64 +153,6 @@ export const caseStudies: CaseStudy[] = [
       "Critical severity bugs around stock need immediate regression tagging",
     ],
   },
-  {
-    slug: "vidyarthi-vikas-academy",
-    title: "Vidyarthi Vikas Academy",
-    tag: "Web",
-    summary:
-      "EdTech platform QA covering student-facing functional and regression testing.",
-    context: {
-      product:
-        "Vidyarthi Vikas Academy is an EdTech web platform for students (courses, content, progress).",
-      role: "Quality Analyst — functional and regression testing across student journeys.",
-    },
-    testingScope: [
-      "Student registration and login",
-      "Course browsing and enrollment flows",
-      "Content playback / navigation sanity",
-      "Regression before content releases",
-    ],
-    approach: {
-      design:
-        "Derived cases from student personas; verified enrollment edge cases and UI feedback for failed actions.",
-      tools: ["Jira", "Google Sheets", "Chrome DevTools"],
-    },
-    sampleArtifacts: {
-      testCases: [
-        {
-          id: "TC-VVA-003",
-          title: "Student enrolls in free course",
-          steps: "Browse course → Enroll → confirm",
-          expected: "Course appears under My Learning",
-        },
-        {
-          id: "TC-VVA-017",
-          title: "Progress persists after logout/login",
-          steps: "Complete a lesson → logout → login → open course",
-          expected: "Progress and last lesson resume correctly",
-        },
-      ],
-      bugReport: {
-        id: "BUG-VVA-011",
-        title: "Enrollment success toast shows wrong course title",
-        severity: "Minor",
-        steps: "Enroll in Course A from search results",
-        actual: "Toast shows Course B title",
-        expected: "Toast reflects the enrolled course name",
-      },
-    },
-    metrics: {
-      bugsFound: 37,
-      testCasesExecuted: 95,
-      regressionCycles: 8,
-    },
-    outcome:
-      "Improved confidence in student journey releases with repeatable regression packs.",
-    learnings: [
-      "Copy/content bugs still matter for trust in EdTech UX",
-      "Progress persistence should be in every smoke suite",
-    ],
-  },
 ];
 
 export function getCaseStudy(slug: string) {

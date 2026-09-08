@@ -123,7 +123,7 @@ export const portfolioData = {
           company: "Ratnam Solutions Private Limited",
           period: "Jun 2026 – Present",
           description:
-            "Performing manual testing (functional, regression, smoke, sanity, exploratory) and API testing across HiKode, NSO — Belgian Waffle, and Vidyarthi Vikas Academy — all web platforms. Managing bug tracking and test documentation in Jira.",
+            "Performing manual testing (functional, regression, smoke, sanity, exploratory) and API testing across HiKode and NSO — Belgian Waffle — web platforms. Managing bug tracking and test documentation in Jira.",
         },
         {
           title: "Quality Analyst Intern",
@@ -231,13 +231,6 @@ export const portfolioData = {
         slug: "nso-belgian-waffle",
         description:
           "Supply Chain Management web application. Focused on functional, regression, and sanity testing.",
-        tag: "Web",
-      },
-      {
-        title: "Vidyarthi Vikas Academy",
-        slug: "vidyarthi-vikas-academy",
-        description:
-          "EdTech platform for students. Conducted functional and regression testing on the web application.",
         tag: "Web",
       },
     ],

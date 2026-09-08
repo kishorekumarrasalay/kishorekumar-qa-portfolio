@@ -48,7 +48,6 @@ const PHONE_HREF = "tel:+919490946159";
 const PROJECT_TAGS: Record<string, string[]> = {
   HiKode: ["Manual Testing", "API Testing", "Bug Reports"],
   "NSO — Belgian Waffle": ["Functional", "Regression", "Sanity"],
-  "Vidyarthi Vikas Academy": ["Functional", "Regression"],
 };
 
 function professionalCards(): QaProjectCard[] {
