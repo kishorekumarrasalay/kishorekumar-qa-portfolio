@@ -72,8 +72,8 @@ export const portfolioData = {
     items: [
       { label: "Bugs logged", value: 180, suffix: "+", prefix: "" },
       { label: "Test cases written", value: 150, suffix: "+", prefix: "" },
-      { label: "Products tested", value: 4, suffix: "", prefix: "" },
-      { label: "Months experience", value: 1, suffix: "", prefix: "" },
+      { label: "Products tested", value: 2, suffix: "", prefix: "" },
+      { label: "Months experience", value: 3, suffix: "", prefix: "" },
     ],
   },
 
@@ -83,7 +83,7 @@ export const portfolioData = {
     whoIAm: {
       title: "Who I Am",
       paragraphs: [
-        "I began my QA journey as an intern and grew into a full-time Quality Analyst role, now contributing across four live products spanning web platforms. I specialize in manual testing — functional, regression, smoke, sanity, and exploratory — combined with structured bug tracking in Jira and clear test documentation.",
+        "I began my QA journey as an intern and grew into a full-time Quality Analyst role, now contributing across two live products spanning web platforms. I specialize in manual testing — functional, regression, smoke, sanity, and exploratory — combined with structured bug tracking in Jira and clear test documentation.",
         "I'm actively expanding my skill set into API testing with Postman and automation with Playwright and TypeScript, working toward a long-term goal of becoming an SDET.",
       ],
     },
