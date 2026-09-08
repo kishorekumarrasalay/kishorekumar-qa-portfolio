@@ -178,11 +178,19 @@ const RESPONSES: Record<string, () => QaMessage> = {
       cards: professionalCards(),
       links: [{ label: "Personal Projects", href: "#personal-projects" }],
     }),
-  certifications: () =>
-    reply(
-      `${experience.certifications.description}\n\n• ${experience.certifications.tags.join("\n• ")}`,
-      { links: [{ label: "View Experience", href: "#experience" }] }
-    ),
+  certifications: () => {
+    const certList =
+      "items" in experience.certifications &&
+      Array.isArray(experience.certifications.items)
+        ? experience.certifications.items
+            .map((c) => `🏆 ${c.title} (${c.issuer} — ${c.date})`)
+            .join("\n")
+        : "";
+    return reply(
+      `Completed Certifications:\n${certList}\n\n${experience.certifications.description}\n\nUpskilling Focus:\n• ${experience.certifications.tags.join("\n• ")}`,
+      { links: [{ label: "View Experience & Certifications", href: "#experience" }] }
+    );
+  },
   phone: () =>
     reply(`Phone: ${PHONE_NUMBER}`, {
       links: [{ label: "Call Kishore", href: PHONE_HREF }],

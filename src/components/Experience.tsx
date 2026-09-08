@@ -1,4 +1,4 @@
-import { Award, Briefcase } from "lucide-react";
+import { Award, Briefcase, CheckCircle, ExternalLink } from "lucide-react";
 import FloatingCard from "./FloatingCard";
 import { MotionItem, MotionStagger } from "./MotionStagger";
 import SectionHeading from "./SectionHeading";
@@ -56,11 +56,51 @@ export default function Experience() {
                 </h3>
               </div>
 
-              <div className="rounded-xl border border-card-border bg-background p-4 sm:p-6">
-                <p className="text-body text-sm text-muted md:text-base">
+              {"items" in experience.certifications &&
+                Array.isArray(experience.certifications.items) &&
+                experience.certifications.items.length > 0 && (
+                  <div className="mb-6 space-y-4">
+                    {experience.certifications.items.map((cert) => (
+                      <div
+                        key={cert.credentialId}
+                        className="group relative rounded-xl border border-primary/30 bg-background/80 p-4 transition-all hover:border-primary/60 sm:p-5"
+                      >
+                        <div className="flex flex-wrap items-start justify-between gap-2">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
+                                <CheckCircle size={12} /> Verified Certificate
+                              </span>
+                              <span className="text-xs text-muted">{cert.date}</span>
+                            </div>
+                            <h4 className="font-heading mt-2 text-base font-bold text-primary-light sm:text-lg">
+                              {cert.title}
+                            </h4>
+                            <p className="mt-1 text-xs text-muted sm:text-sm">
+                              <span className="font-medium text-primary">{cert.issuer}</span> • Instructor: {cert.instructor} • {cert.duration}
+                            </p>
+                          </div>
+                          {cert.credentialUrl && (
+                            <a
+                              href={cert.credentialUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="mt-1 inline-flex items-center gap-1.5 rounded-lg border border-card-border bg-tag-bg px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-black"
+                            >
+                              Verify <ExternalLink size={12} />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+              <div className="rounded-xl border border-card-border bg-background/50 p-4 sm:p-5">
+                <p className="text-body text-xs text-muted sm:text-sm">
                   {experience.certifications.description}
                 </p>
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className="mt-3 flex flex-wrap gap-2">
                   {experience.certifications.tags.map((tag) => (
                     <Tag key={tag}>{tag}</Tag>
                   ))}

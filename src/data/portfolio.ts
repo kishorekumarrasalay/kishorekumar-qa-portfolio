@@ -143,6 +143,18 @@ export const portfolioData = {
         "Playwright with TypeScript",
         "Generative AI for Software Testing",
       ],
+      items: [
+        {
+          title: "Learn Generative AI for Software Testing",
+          issuer: "Udemy",
+          instructor: "Pavan Kumar",
+          date: "Aug 17, 2026",
+          duration: "9 total hours",
+          credentialId: "UC-d029426d-bcbd-4a57-bad6-1f0962aba653",
+          credentialUrl:
+            "https://ude.my/UC-d029426d-bcbd-4a57-bad6-1f0962aba653",
+        },
+      ],
     },
   },
 

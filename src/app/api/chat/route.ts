@@ -77,6 +77,18 @@ ${personalProjects.projects
   .join("\n")}
 
 ## Certifications / learning
+Completed Certificates:
+${
+  "items" in experience.certifications &&
+  Array.isArray(experience.certifications.items)
+    ? experience.certifications.items
+        .map(
+          (c) =>
+            `- ${c.title} by ${c.issuer} (Instructor: ${c.instructor}, ${c.date}, ${c.duration}) [Credential: ${c.credentialUrl}]`
+        )
+        .join("\n")
+    : ""
+}
 ${experience.certifications.description}
 Tags: ${experience.certifications.tags.join(", ")}
 `;
