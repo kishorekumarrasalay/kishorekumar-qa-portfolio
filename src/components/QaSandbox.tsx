@@ -231,7 +231,7 @@ export default function QaSandbox() {
                     <p className="text-[11px] sm:text-xs text-muted">Test the cart total calculation & user profile actions</p>
                   </div>
                   <span className="text-[10px] sm:text-xs font-mono bg-primary/10 text-primary-light px-2.5 py-1 rounded-md border border-primary/20 self-start sm:self-auto">
-                    Live Product Demo
+                    Web Application Demo
                   </span>
                 </div>
 

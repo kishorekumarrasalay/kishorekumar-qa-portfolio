@@ -35,7 +35,7 @@ export const SUGGESTIONS: Suggestion[] = [
   { label: "🧪 Playwright Suite", query: "Tell me about Playwright automation" },
   { label: "📡 API & Postman", query: "How does Kishore test APIs?" },
   { label: "👨 About Kishore", query: "Tell me about Kishore" },
-  { label: "💼 Live Products", query: "What live products has he tested?" },
+  { label: "💻 Web Applications", query: "What web applications has he tested?" },
   { label: "📄 Download CV", query: "Download resume" },
 ];
 
@@ -63,7 +63,7 @@ export function getWelcomeMessage(): QaMessage {
   return {
     id: "welcome",
     role: "assistant",
-    text: `👋 Hi, I'm Spark AI — Kishore's QA Assistant!\n\nI can answer questions about:\n✅ Manual & API Testing   ✅ Playwright & TypeScript\n✅ Live Tested Products    ✅ Test Automation Roadmap\n\nFeel free to type a query or click any of the action buttons below!`,
+    text: `👋 Hi, I'm Spark AI — Kishore's QA Assistant!\n\nI can answer questions about:\n✅ Manual & API Testing   ✅ Playwright & TypeScript\n✅ Tested Web Applications ✅ Test Automation Roadmap\n\nFeel free to type a query or click any of the action buttons below!`,
   };
 }
 
@@ -112,7 +112,7 @@ const RESPONSES: Record<string, () => QaMessage> = {
     ),
   manual: () =>
     reply(
-      `Manual testing is Kishore's core expertise. He executes functional, regression, smoke, sanity, and exploratory testing across live web platforms, logging defects with full step-by-step documentation in Google Sheets.`,
+      `Manual testing is Kishore's core expertise. He executes functional, regression, smoke, sanity, and exploratory testing across web applications, logging defects with full step-by-step documentation in Google Sheets.`,
       {
         links: [
           { label: "🐞 Live Bug Hunt", href: "#qa-sandbox" },
@@ -174,7 +174,7 @@ const RESPONSES: Record<string, () => QaMessage> = {
     );
   },
   projects: () =>
-    reply(`Here are the live products Kishore has tested at Ratnam Solutions:`, {
+    reply(`Here are the web applications Kishore has tested at Ratnam Solutions:`, {
       cards: professionalCards(),
       links: [{ label: "Personal Projects", href: "#personal-projects" }],
     }),

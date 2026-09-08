@@ -80,7 +80,7 @@ export const portfolioData = {
       { label: "Bugs logged", value: 70, suffix: "+", prefix: "" },
       { label: "Test cases written", value: 150, suffix: "+", prefix: "" },
       { label: "Products tested", value: 2, suffix: "", prefix: "" },
-      { label: "Months experience", value: getMonthsExperience("2026-03-18"), suffix: "", prefix: "" },
+      { label: "Months experience", value: 3, suffix: "", prefix: "" },
     ],
   },
 
@@ -90,7 +90,7 @@ export const portfolioData = {
     whoIAm: {
       title: "Who I Am",
       paragraphs: [
-        "I began my QA journey as an intern and grew into a full-time Quality Analyst role, now contributing across two live products spanning web platforms. I specialize in manual testing — functional, regression, smoke, sanity, and exploratory — combined with structured bug tracking in Google Sheets and clear test documentation.",
+        "I began my QA journey as an intern and grew into a full-time Quality Analyst role, now contributing across two web applications. I specialize in manual testing — functional, regression, smoke, sanity, and exploratory — combined with structured bug tracking in Google Sheets and clear test documentation.",
         "I'm actively expanding my skill set into API testing with Postman and automation with Playwright and TypeScript, working toward a long-term goal of becoming an SDET.",
       ],
     },
@@ -137,7 +137,7 @@ export const portfolioData = {
           company: "Ratnam Solutions Private Limited",
           period: "Mar 2026 – Jun 2026",
           description:
-            "Learned core QA fundamentals including SDLC/STLC, test case writing, and defect lifecycle management while contributing to live product testing.",
+            "Learned core QA fundamentals including SDLC/STLC, test case writing, and defect lifecycle management while contributing to web application testing.",
         },
       ],
     },
@@ -299,7 +299,7 @@ export const portfolioData = {
           "Planning to extend into API testing using Playwright's request context",
         ],
         whyTitle: "Why This Project",
-        why: "While my current role focuses on manual testing (functional, regression, smoke, and exploratory testing across live products), I wanted to apply automation concepts to a real, practical application rather than just tutorials — so I chose HiKode as my testing ground.",
+        why: "While my current role focuses on manual testing (functional, regression, smoke, and exploratory testing across web applications), I wanted to apply automation concepts to a real, practical application rather than just tutorials — so I chose HiKode as my testing ground.",
         currentFocusTitle: "Current Focus",
         currentFocus:
           "Actively adding new test cases, refining the framework structure, and improving reusability of components. This is an ongoing project, not a finished deliverable.",
