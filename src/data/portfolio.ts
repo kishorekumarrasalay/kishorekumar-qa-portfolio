@@ -61,7 +61,7 @@ export const portfolioData = {
 
   // ----- Home / Hero section -----
   hero: {
-    bio: "Quality Analyst with hands-on experience in manual testing, specializing in functional, regression, smoke, sanity, and exploratory testing. Currently testing the NSO Belgian Waffle Supply Chain Management application and the Hikode job application at Ratnam Solutions Private Limited. Continuously enhancing my skills in REST API testing, Playwright, and TypeScript to build scalable automation solutions and advance toward an SDET role.",
+    bio: "Quality Analyst with 4 months of hands-on experience in manual testing, specializing in functional, regression, smoke, sanity, and exploratory testing. Currently testing the NSO Belgian Waffle Supply Chain Management application and the Hikode job application at Ratnam Solutions Private Limited. Continuously enhancing my skills in REST API testing, Playwright, and TypeScript to build scalable automation solutions and advance toward an SDET role.",
     roleCycle: [
       "Quality Analyst",
       "Manual Tester",
@@ -90,7 +90,7 @@ export const portfolioData = {
     whoIAm: {
       title: "Who I Am",
       paragraphs: [
-        "I began my QA journey as an intern and grew into a full-time Quality Analyst role, now contributing across two web applications. I specialize in manual testing — functional, regression, smoke, sanity, and exploratory — combined with structured bug tracking in Google Sheets and clear test documentation.",
+        "I began my QA journey as an intern and grew into a full-time Quality Analyst role, now contributing across two web applications with 4 months of hands-on experience. I specialize in manual testing — functional, regression, smoke, sanity, and exploratory — combined with structured bug tracking in Google Sheets and clear test documentation.",
         "I'm actively expanding my skill set into API testing with Postman and automation with Playwright and TypeScript, working toward a long-term goal of becoming an SDET.",
       ],
     },

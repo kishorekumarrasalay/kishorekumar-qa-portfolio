@@ -44,6 +44,7 @@ Do not invent employers, certifications, or metrics that are not listed below.
 ## Profile
 - Name: ${site.name}
 - Role: ${site.role}
+- Total Experience: 4 months of hands-on QA experience
 - Email: ${social.email}
 - LinkedIn: ${social.linkedin}
 - GitHub: ${social.github}

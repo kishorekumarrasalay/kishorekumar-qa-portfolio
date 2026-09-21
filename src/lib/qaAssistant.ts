@@ -238,7 +238,7 @@ const RESPONSES: Record<string, () => QaMessage> = {
     const jobs = experience.work.items
       .map((j) => `• ${j.title} @ ${j.company} (${j.period})\n  ${j.description}`)
       .join("\n\n");
-    return reply(`Kishore's work experience:\n\n${jobs}`, {
+    return reply(`Kishore's work experience (4 months total):\n\n${jobs}`, {
       links: [{ label: "View Experience", href: "#experience" }],
     });
   },
@@ -249,7 +249,7 @@ const RESPONSES: Record<string, () => QaMessage> = {
     ),
   about: () =>
     reply(
-      `${site.name} is a ${site.role} at Ratnam Solutions Private Limited. ${hero.bio}`,
+      `${site.name} is a ${site.role} at Ratnam Solutions Private Limited with 4 months of hands-on experience in manual testing, specializing in functional, regression, smoke, sanity, and exploratory testing. Currently testing the NSO Belgian Waffle Supply Chain Management application and the Hikode job application. Continuously enhancing skills in REST API testing, Playwright, and TypeScript to build scalable automation solutions and advance toward an SDET role.`,
       {
         links: [
           { label: "View About", href: "#about" },
