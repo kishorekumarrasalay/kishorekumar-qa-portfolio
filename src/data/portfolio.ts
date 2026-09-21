@@ -80,7 +80,7 @@ export const portfolioData = {
       { label: "Bugs logged", value: 70, suffix: "+", prefix: "" },
       { label: "Test cases written", value: 150, suffix: "+", prefix: "" },
       { label: "Products tested", value: 2, suffix: "", prefix: "" },
-      { label: "Months experience", value: 3, suffix: "", prefix: "" },
+      { label: "Months experience", value: 4, suffix: "", prefix: "" },
     ],
   },
 
