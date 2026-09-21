@@ -480,7 +480,7 @@ export default function QaAssistant() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onFocus={() => setTimeout(scrollToBottom, 150)}
-                placeholder="Ask Kishore's AI anything..."
+                placeholder="Ask about Kishore's resume..."
                 className="flex-1 bg-transparent py-1.5 pr-2 text-xs sm:text-sm text-foreground outline-none placeholder:text-muted"
               />
               <button

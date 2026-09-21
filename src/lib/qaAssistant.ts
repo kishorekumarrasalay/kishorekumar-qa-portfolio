@@ -31,11 +31,10 @@ export interface Suggestion {
 }
 
 export const SUGGESTIONS: Suggestion[] = [
-  { label: "🐞 Bug Sandbox", query: "Open bug hunt sandbox" },
-  { label: "🧪 Playwright Suite", query: "Tell me about Playwright automation" },
-  { label: "📡 API & Postman", query: "How does Kishore test APIs?" },
   { label: "👨 About Kishore", query: "Tell me about Kishore" },
-  { label: "💻 Web Applications", query: "What web applications has he tested?" },
+  { label: "💼 Experience", query: "Tell me about Kishore's experience" },
+  { label: "🛠️ Skills", query: "What are Kishore's skills?" },
+  { label: "🐞 Bug Sandbox", query: "Open bug hunt sandbox" },
   { label: "📄 Download CV", query: "Download resume" },
 ];
 
@@ -63,7 +62,7 @@ export function getWelcomeMessage(): QaMessage {
   return {
     id: "welcome",
     role: "assistant",
-    text: `👋 Hi, I'm Spark AI — Kishore's QA Assistant!\n\nI can answer questions about:\n✅ Manual & API Testing   ✅ Playwright & TypeScript\n✅ Tested Web Applications ✅ Test Automation Roadmap\n\nFeel free to type a query or click any of the action buttons below!`,
+    text: `👋 Hi! I'm Kishore's Assistant.\n\nI can answer questions about:\n✅ Professional Experience   ✅ QA Skills & Tools\n✅ Education & Certifications ✅ Resume & Contact\n\nFeel free to type a query or click any suggestion below!`,
   };
 }
 
@@ -366,7 +365,7 @@ export function getAssistantReply(input: string): QaMessage {
 
   if (isGreeting(norm, tokens) || tokens.includes("help")) {
     return reply(
-      `👋 Hi! Welcome to ${site.name}'s QA Portfolio.\nI'm your AI QA Assistant. Ask me anything about my experience, projects, testing skills, certifications, or resume.`
+      `👋 Hi! Welcome to ${site.name}'s QA Portfolio.\nI can answer questions about my experience, QA skills, projects, certifications, or resume.`
     );
   }
 
