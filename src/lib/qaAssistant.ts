@@ -134,7 +134,7 @@ const RESPONSES: Record<string, () => QaMessage> = {
       .find((c) => c.id === "learning")
       ?.items.join(", ");
     return reply(
-      `Kishore's core QA toolkit:\n\n• Manual Testing (Functional, Regression, Smoke, Sanity, Exploratory)\n• Automation: Playwright with TypeScript (Page Object Model)\n• API Testing: Postman, REST & SOAP, JSONPath, Auth types\n• Database: SQL (basic queries)\n• Tools: Google Sheets (Bug Tracking), Git & GitHub, Excel\n\nCurrently upskilling in: ${learning}`,
+      `Kishore's core technical skills:\n\n• Testing Expertise: Manual, Functional, Regression, Smoke, Sanity, Exploratory, Integration, System, UAT, Test Case Design, Bug Reporting, Test Documentation\n• Languages & Frameworks: TypeScript, Playwright, POM, SQL\n• API & Data Validation: API Testing, Postman, REST/SOAP APIs, JSONPath, Bearer Token, OAuth 2.0\n• Tools: Git, GitHub, Jira, Jenkins, VS Code, Cursor, Google Sheets, Excel\n• Automation & CI/CD: Playwright Automation, POM, Automated Test Execution, Test Reporting\n\nCurrently learning: ${learning}`,
       { links: [{ label: "View Skills", href: "#skills" }] }
     );
   },

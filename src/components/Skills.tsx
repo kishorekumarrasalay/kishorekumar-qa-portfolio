@@ -5,6 +5,7 @@ import {
   FileText,
   GraduationCap,
   Network,
+  Settings,
   Wrench,
 } from "lucide-react";
 import FloatingCard from "./FloatingCard";
@@ -15,8 +16,9 @@ import { portfolioData } from "@/data/portfolio";
 const iconMap = {
   testing: FileText,
   languages: Code2,
-  tools: Wrench,
   api: Network,
+  tools: Wrench,
+  automation: Settings,
   learning: GraduationCap,
 } as const;
 
@@ -28,22 +30,17 @@ export default function Skills() {
       <div className="mx-auto max-w-6xl">
         <SectionHeading title={skills.sectionTitle} />
 
-        {/*
-          Desktop (3-col, no empty holes):
-          [ Testing Expertise —— ] [ Languages ]
-          [ Tools ] [ API ] [ Learning ]
-        */}
         <MotionStagger className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5">
           {skills.bentoCards.map((card) => {
-            const Icon = iconMap[card.icon];
+            const Icon = iconMap[card.icon as keyof typeof iconMap] || FileText;
             const isLearning = "learning" in card && card.learning;
-            const isWide = card.id === "testing";
+            const isMultiCol = card.items.length > 7;
 
             return (
               <MotionItem
                 key={card.id}
                 variant="fadeUp"
-                className={`h-full ${isWide ? "sm:col-span-2 lg:col-span-2" : ""}`}
+                className="h-full"
               >
                 <FloatingCard
                   float={false}
@@ -75,8 +72,8 @@ export default function Skills() {
 
                   <ul
                     className={`flex-1 px-4 py-3.5 sm:px-5 sm:py-4 ${
-                      isWide
-                        ? "grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2"
+                      isMultiCol
+                        ? "grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2"
                         : "flex flex-col gap-y-2"
                     }`}
                   >
