@@ -28,7 +28,7 @@ export default function Contact() {
 
   const valueClass = (type: string) => {
     if (type === "email") {
-      return "mt-1.5 w-full max-w-full px-0.5 text-[10px] leading-snug font-medium break-all text-foreground sm:mt-2 sm:text-xs";
+      return "mt-1.5 w-full max-w-full px-0.5 text-[9px] leading-snug font-medium whitespace-nowrap overflow-hidden text-ellipsis text-foreground sm:mt-2 sm:text-[10px]";
     }
     if (type === "phone") {
       return "mt-1.5 w-full max-w-full px-0.5 text-[11px] leading-snug font-medium whitespace-nowrap text-foreground sm:mt-2 sm:text-sm";
