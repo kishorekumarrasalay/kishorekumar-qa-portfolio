@@ -124,17 +124,13 @@ const RESPONSES: Record<string, () => QaMessage> = {
       `You can test Kishore's interactive QA Lab directly on this page!\nIt features a Live Bug Hunt Sandbox, Postman API runner, and a sample Test Case Explorer.`,
       { links: [{ label: "🚀 Open QA Sandbox", href: "#qa-sandbox" }] }
     ),
-  sql: () =>
-    reply(
-      `Kishore uses SQL to perform backend data validation during testing — verifying records in database tables, checking foreign keys, and ensuring UI inputs correctly reflect in the backend.`,
-      { links: [{ label: "View Skills", href: "#skills" }] }
-    ),
+
   skills: () => {
     const learning = skills.bentoCards
       .find((c) => c.id === "learning")
       ?.items.join(", ");
     return reply(
-      `Kishore's core technical skills:\n\n• Testing Expertise: Manual, Functional, Regression, Smoke, Sanity, Exploratory, Integration, System, UAT, Test Case Design, Bug Reporting, Test Documentation\n• Languages & Frameworks: TypeScript, Playwright, POM, SQL\n• API & Data Validation: API Testing, Postman, REST/SOAP APIs, JSONPath, Bearer Token, OAuth 2.0\n• Tools: Git, GitHub, Jira, Jenkins, VS Code, Cursor, Google Sheets, Excel\n• Automation & CI/CD: Playwright Automation, POM, Automated Test Execution, Test Reporting\n\nCurrently learning: ${learning}`,
+      `Kishore's core technical skills:\n\n• Testing Expertise: Manual, Functional, Regression, Smoke, Sanity, Exploratory, Integration, System, UAT, Test Case Design, Bug Reporting, Test Documentation\n• Programming: TypeScript\n• API & Data Validation: API Testing, Postman, REST/SOAP APIs, JSONPath, JSON Schema Validation, Bearer Token, OAuth 2.0, API Keys\n• Playwright Automation: Playwright with TypeScript, Page Object Model (POM), Test Automation, Automated Test Execution, Locators and Assertions, Test Reporting\n• Tools: Jira, Git, GitHub, VS Code, Google Sheets, Microsoft Excel\n\nCurrently learning: ${learning}`,
       { links: [{ label: "View Skills", href: "#skills" }] }
     );
   },
@@ -274,7 +270,7 @@ const INTENTS: Intent[] = [
     phrases: ["manual testing"],
     keywords: ["manual", "functional", "regression", "smoke", "sanity", "exploratory"],
   },
-  { id: "sql", keywords: ["sql", "database", "databases", "query"] },
+
   { id: "jira", keywords: ["jira", "bug", "bugs", "defect", "defects", "ticket", "kanban"] },
   {
     id: "skills",

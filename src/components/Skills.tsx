@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  Code2,
   FileText,
   GraduationCap,
   Network,
-  Settings,
+  Terminal,
   Wrench,
+  Zap,
 } from "lucide-react";
 import FloatingCard from "./FloatingCard";
 import { MotionItem, MotionStagger } from "./MotionStagger";
@@ -15,10 +15,10 @@ import { portfolioData } from "@/data/portfolio";
 
 const iconMap = {
   testing: FileText,
-  languages: Code2,
+  programming: Terminal,
   api: Network,
+  playwright: Zap,
   tools: Wrench,
-  automation: Settings,
   learning: GraduationCap,
 } as const;
 
