@@ -34,11 +34,19 @@ export const SUGGESTIONS: Suggestion[] = [
   { label: "👨 About Kishore", query: "Tell me about Kishore" },
   { label: "💼 Experience", query: "Tell me about Kishore's experience" },
   { label: "🛠️ Skills", query: "What are Kishore's skills?" },
-  { label: "🐞 Bug Sandbox", query: "Open bug hunt sandbox" },
-  { label: "📄 Download CV", query: "Download resume" },
+  { label: "📁 Projects", query: "Show Kishore's projects" },
+  { label: "🐞 Sample Bug Report", query: "Show me a sample bug report" },
+  { label: "📋 Sample Test Cases", query: "Show sample test cases for a login feature" },
+  { label: "🌟 Why Hire Kishore?", query: "Why should I hire Kishore?" },
+  { label: "🗺️ Learning Roadmap", query: "What is Kishore's learning roadmap?" },
+  { label: "📄 Download Resume", query: "Download resume" },
+  { label: "🕐 Availability", query: "Is Kishore available for work?" },
+  { label: "📬 Contact", query: "How do I contact Kishore?" },
 ];
 
-const { site, hero, about, experience, skills, portfolio, personalProjects, social } =
+import { KB } from "@/data/kishore-knowledge";
+
+const { site, about, experience, skills, portfolio, personalProjects, social } =
   portfolioData;
 
 const PHONE_NUMBER = "+91 94909 46159";
@@ -252,6 +260,43 @@ const RESPONSES: Record<string, () => QaMessage> = {
         ],
       }
     ),
+  whyHire: () =>
+    reply(
+      `Here's why you should consider Kishore:\n\n${KB.whyHire.map((w) => `• ${w}`).join("\n")}`,
+      {
+        links: [
+          { label: "📄 Download Resume", href: KB.resumeHref, download: true },
+          { label: "📬 Contact", href: "#contact" },
+        ],
+      }
+    ),
+  availability: () =>
+    reply(
+      `${KB.availability}\n\nBest ways to reach Kishore:\n📧 ${KB.email}\n💼 LinkedIn below`,
+      {
+        links: [
+          { label: "📧 Email Kishore", href: `mailto:${KB.email}` },
+          { label: "💼 LinkedIn", href: KB.linkedin },
+        ],
+      }
+    ),
+  learningRoadmap: () =>
+    reply(
+      `Kishore's current learning roadmap (SDET path):\n\n${KB.learningRoadmap
+        .map((r) => `🔹 ${r.skill} [${r.status}]\n   Goal: ${r.goal}`)
+        .join("\n\n")}`,
+      { links: [{ label: "View Skills", href: "#skills" }] }
+    ),
+  sampleBugReport: () =>
+    reply(
+      `🐞 Sample Bug Report\n\n**Bug ID:** BUG-042\n**Title:** Login fails with valid credentials on Safari\n\n**Description:**\nThe login form does not authenticate users with valid email/password on Safari v17.\n\n**Steps to Reproduce:**\n1. Open the app on Safari browser\n2. Enter a valid registered email\n3. Enter the correct password\n4. Click the 'Sign In' button\n\n**Expected Result:** User is redirected to the dashboard\n**Actual Result:** Page refreshes — no error shown, user not logged in\n\n**Severity:** High\n**Priority:** P1\n**Environment:** Safari 17.0, macOS Ventura 13.5\n**Reporter:** Kishore Kumar\n**Status:** Open`,
+      { links: [{ label: "🐞 Try Bug Hunt", href: "#qa-sandbox" }] }
+    ),
+  sampleTestCases: () =>
+    reply(
+      `📋 Sample Test Cases — Login Feature\n\n| ID | Test Case | Type | Expected Result |\n|-----|-----------|------|----------------|\n| TC-01 | Valid email + valid password | Positive | Redirect to dashboard |\n| TC-02 | Valid email + wrong password | Negative | Show 'Incorrect password' error |\n| TC-03 | Unregistered email | Negative | Show 'Account not found' error |\n| TC-04 | Empty email field | Negative | Show 'Email is required' validation |\n| TC-05 | Empty password field | Negative | Show 'Password is required' validation |\n| TC-06 | SQL injection in email field | Edge | No crash; show generic error |\n| TC-07 | 300-char password input | Edge | Input capped or shows length error |\n| TC-08 | Login with caps-lock on | Edge | Show caps-lock warning (if applicable) |`,
+      { links: [{ label: "📋 Test Case Explorer", href: "#qa-sandbox" }] }
+    ),
 };
 
 // ── Intent definitions (priority order) ──
@@ -287,8 +332,13 @@ const INTENTS: Intent[] = [
   { id: "email", keywords: ["email", "gmail", "mail"] },
   { id: "github", phrases: ["git hub", "git and github"], keywords: ["github", "git", "repo", "repository"] },
   { id: "linkedin", phrases: ["linked in"], keywords: ["linkedin"] },
-  { id: "contact", phrases: ["contact details", "get in touch", "how to reach", "hire"], keywords: ["contact", "reach", "hire"] },
+  { id: "contact", phrases: ["contact details", "get in touch", "how to reach"], keywords: ["contact", "reach"] },
   { id: "resume", phrases: ["download resume", "download cv"], keywords: ["resume", "cv"] },
+  { id: "whyHire", phrases: ["why hire", "why should i hire", "reason to hire"], keywords: ["hire"] },
+  { id: "availability", phrases: ["available for work", "open to work", "job search"], keywords: ["availability", "available", "open"] },
+  { id: "learningRoadmap", phrases: ["learning roadmap", "learning path", "study plan", "career roadmap"], keywords: ["roadmap", "learning", "plan"] },
+  { id: "sampleBugReport", phrases: ["sample bug report", "example bug report", "bug report format"], keywords: [] },
+  { id: "sampleTestCases", phrases: ["sample test cases", "example test cases", "test case format"], keywords: [] },
   {
     id: "about",
     phrases: ["about kishore", "about you", "tell me about", "who is kishore", "background"],

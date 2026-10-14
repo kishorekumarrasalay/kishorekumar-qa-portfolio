@@ -1,13 +1,12 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
-import { portfolioData } from "@/data/portfolio";
-import { caseStudies } from "@/data/caseStudies";
+import { KB } from "@/data/kishore-knowledge";
 
 export const runtime = "nodejs";
 
 const WINDOW_MS = 60_000;
-const MAX_PER_WINDOW = 8;
-const MAX_MESSAGE_LEN = 500;
+const MAX_PER_WINDOW = 12;
+const MAX_MESSAGE_LEN = 1200; // longer for recruiter mode (JD paste)
 
 const hits = new Map<string, { count: number; resetAt: number }>();
 
@@ -31,68 +30,127 @@ function rateLimit(ip: string) {
   return true;
 }
 
-function buildSystemPrompt() {
-  const { site, about, experience, skills, portfolio, personalProjects, social } =
-    portfolioData;
+function buildSystemPrompt(mode: string): string {
+  const skillsList = KB.skills
+    .map((s) => `  • ${s.category}: ${s.items.join(", ")}`)
+    .join("\n");
 
-  return `You are the QA Assistant for ${site.name}'s portfolio website.
-Answer ONLY questions about ${site.name}'s QA background, skills, projects, experience, resume, and contact.
-If asked something off-topic, politely redirect to those topics.
-Keep answers concise (2–5 short paragraphs max), factual, and professional.
-Do not invent employers, certifications, or metrics that are not listed below.
+  const base = `You are Spark AI, the assistant for ${KB.name}'s QA portfolio website.
+You answer ONLY from the verified knowledge base below. Never invent facts, skills, certifications, or employers.
+If asked about something not in the knowledge base, say it is not available and share ${KB.email} and ${KB.linkedin}.
+Be concise (2–5 short paragraphs max), professional, and honest.
 
 ## Profile
-- Name: ${site.name}
-- Role: ${site.role}
-- Total Experience: 6 months of hands-on QA experience
-- Email: ${social.email}
-- LinkedIn: ${social.linkedin}
-- GitHub: ${social.github}
-- Location: Hyderabad, Telangana, India
+- Name: ${KB.name}
+- Role: ${KB.role}
+- Experience: ${KB.stats.monthsExperience}+ months
+- Email: ${KB.email}
+- LinkedIn: ${KB.linkedin}
+- GitHub: ${KB.github}
+- Location: ${KB.location}
+- Availability: ${KB.availability}
 
-## About
-${about.whoIAm.paragraphs.join("\n")}
+## Stats (from portfolio stats bar)
+- Bugs logged: ${KB.stats.bugsLogged}+
+- Test cases written: ${KB.stats.testCasesWritten}+
+- Products tested: ${KB.stats.productsTested}
 
-## Experience
-${experience.work.items
-  .map((i) => `- ${i.title} @ ${i.company} (${i.period}): ${i.description}`)
-  .join("\n")}
+## Bio
+${KB.bio}
 
 ## Skills
-${skills.bentoCards.map((c) => `- ${c.title}: ${c.items.join(", ")}`).join("\n")}
+${skillsList}
 
-## Work products tested
-${portfolio.projects.map((p) => `- ${p.title}: ${p.description}`).join("\n")}
+## Currently Learning
+${KB.currentlyLearning.join(", ")}
 
-## Case study highlights
-${caseStudies
-  .map(
-    (c) =>
-      `- ${c.title}: bugs~${c.metrics.bugsFound}, cases~${c.metrics.testCasesExecuted}`
-  )
-  .join("\n")}
+## Experience
+${KB.experience.map((e) => `- ${e.title} @ ${e.company} (${e.period}): ${e.description}`).join("\n")}
 
-## Personal projects
-${personalProjects.projects
-  .map((p) => `- ${p.title} (${p.status}): ${p.description}`)
-  .join("\n")}
+## Personal Projects
+${KB.personalProjects.map((p) => `- ${p.title} (${p.status}): ${p.description}\n  Tech: ${p.techStack.join(", ")}`).join("\n")}
 
-## Certifications / learning
-Completed Certificates:
-${
-  "items" in experience.certifications &&
-  Array.isArray(experience.certifications.items)
-    ? experience.certifications.items
-        .map(
-          (c) =>
-            `- ${c.title} by ${c.issuer} (Instructor: ${c.instructor}, ${c.date}, ${c.duration}) [Credential: ${c.credentialUrl}]`
-        )
-        .join("\n")
-    : ""
-}
-${experience.certifications.description}
-Tags: ${experience.certifications.tags.join(", ")}
+## Education
+${KB.education.degree}, ${KB.education.college} (${KB.education.period})
+
+## Why Hire ${KB.name}
+${KB.whyHire.map((w) => `- ${w}`).join("\n")}
+
+## Learning Roadmap
+${KB.learningRoadmap.map((r) => `- ${r.skill} (${r.status}): ${r.goal}`).join("\n")}
+
+## Resume
+Download: ${KB.resumeHref}
 `;
+
+  if (mode === "recruiter") {
+    return (
+      base +
+      `\n## RECRUITER MODE
+The user has pasted a job description. Analyze it against the knowledge base above and respond with:
+1. **Matching Skills** — skills Kishore already has that match the JD
+2. **Skills Still Being Learned** — skills in the JD that Kishore is actively learning
+3. **Gaps** — skills in the JD that Kishore does not currently have (be honest)
+4. **Fit Summary** — a short, honest paragraph about whether Kishore is a good fit
+Do NOT claim skills that are not in the knowledge base. Do NOT mention SQL, Jenkins, or Cursor.`
+    );
+  }
+
+  if (mode === "test_feature") {
+    return (
+      base +
+      `\n## TEST MY FEATURE MODE
+The user has described a feature name. Generate a QA test plan:
+1. A summary of what needs to be tested
+2. A markdown table of test cases (columns: ID | Test Case | Type | Steps | Expected Result)
+   - Include at least 3 positive, 2 negative, and 2 edge cases
+3. Any important edge cases to watch for
+Keep the table clean and easy to copy.`
+    );
+  }
+
+  if (mode === "bug_report") {
+    return (
+      base +
+      `\n## BUG REPORT GENERATOR MODE
+The user has described a bug in plain language. Generate a professional bug report:
+- **Bug ID**: BUG-XXX (auto-generate)
+- **Title**: One line summary
+- **Description**: What is happening
+- **Steps to Reproduce**: Numbered list
+- **Expected Result**: What should happen
+- **Actual Result**: What actually happens
+- **Severity**: Critical / High / Medium / Low (choose appropriate)
+- **Priority**: P1 / P2 / P3 / P4 (choose appropriate)
+- **Environment**: Web browser / OS (infer from description or use generic)
+Keep it in a clean format the user can copy directly into a bug tracker.`
+    );
+  }
+
+  if (mode === "interview") {
+    return (
+      base +
+      `\n## MOCK INTERVIEW MODE
+You are conducting a mock QA interview. Ask manual testing questions one at a time.
+After the user answers, give brief feedback (correct / partially correct / incorrect and why), then ask the next question.
+After 5 questions, give a final score (X/5) with overall feedback.
+Focus on: test case design, defect life cycle, types of testing, STLC, and real-world scenarios.
+Do not ask about SQL, Jenkins, or any skill not in the knowledge base.`
+    );
+  }
+
+  if (mode === "quiz") {
+    return (
+      base +
+      `\n## QA QUIZ MODE
+Present a 5-question QA quiz. Show one question at a time with multiple choice options (A, B, C, D).
+After the user answers, show whether it is correct and briefly explain why.
+After all 5, show the final score (X/5) and encourage the user.
+Topics: types of testing, STLC, defect severity vs priority, test case writing, and exploratory testing.`
+    );
+  }
+
+  return base;
 }
 
 export async function POST(req: Request) {
@@ -109,8 +167,7 @@ export async function POST(req: Request) {
     if (!apiKey) {
       return NextResponse.json(
         {
-          error:
-            "Chat API is not configured. Set ANTHROPIC_API_KEY on the server.",
+          error: "Chat API is not configured. Set ANTHROPIC_API_KEY on the server.",
           fallback: true,
         },
         { status: 503 }
@@ -120,28 +177,27 @@ export async function POST(req: Request) {
     const body = (await req.json()) as {
       message?: string;
       history?: { role: "user" | "assistant"; content: string }[];
+      mode?: string;
     };
 
     const message = (body.message ?? "").trim();
     if (!message || message.length > MAX_MESSAGE_LEN) {
       return NextResponse.json(
-        { error: "Message must be between 1 and 500 characters." },
+        { error: `Message must be between 1 and ${MAX_MESSAGE_LEN} characters.` },
         { status: 400 }
       );
     }
 
+    const mode = body.mode ?? "default";
     const history = (body.history ?? []).slice(-8);
     const anthropic = new Anthropic({ apiKey });
 
     const stream = await anthropic.messages.stream({
       model: "claude-sonnet-4-6",
-      max_tokens: 700,
-      system: buildSystemPrompt(),
+      max_tokens: mode === "recruiter" || mode === "test_feature" ? 1200 : 700,
+      system: buildSystemPrompt(mode),
       messages: [
-        ...history.map((m) => ({
-          role: m.role,
-          content: m.content,
-        })),
+        ...history.map((m) => ({ role: m.role, content: m.content })),
         { role: "user", content: message },
       ],
     });

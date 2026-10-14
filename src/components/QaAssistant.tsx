@@ -1,8 +1,23 @@
 "use client";
 
-import { Send, X, Volume2, VolumeX, Copy, Check, ThumbsUp, Code, Sparkles } from "lucide-react";
+import {
+  Send,
+  X,
+  Volume2,
+  VolumeX,
+  Copy,
+  Check,
+  ThumbsUp,
+  ThumbsDown,
+  Code,
+  Sparkles,
+  Mic,
+  MicOff,
+  Globe,
+  ChevronDown,
+} from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import {
   getAssistantReply,
   getOutroMessage,
@@ -10,6 +25,24 @@ import {
   SUGGESTIONS,
   type QaMessage,
 } from "@/lib/qaAssistant";
+
+// ── Types ────────────────────────────────────────────────────────────────────
+
+type ChatMode =
+  | "default"
+  | "recruiter"
+  | "test_feature"
+  | "bug_report"
+  | "interview"
+  | "quiz";
+
+type Language = "en" | "te" | "hi";
+
+interface FeedbackState {
+  [msgId: string]: "up" | "down" | null;
+}
+
+// ── Sub-components ───────────────────────────────────────────────────────────
 
 function QaLogo({
   size = 32,
@@ -46,43 +79,172 @@ function QaLogo({
   );
 }
 
-function TypedText({
-  text,
-  onUpdate,
-  onDone,
-}: {
-  text: string;
-  onUpdate?: () => void;
-  onDone?: () => void;
-}) {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReduced) {
-      setCount(text.length);
-      onUpdate?.();
-      onDone?.();
-      return;
-    }
-
-    let i = 0;
-    const id = setInterval(() => {
-      i += 2;
-      setCount(Math.min(i, text.length));
-      onUpdate?.();
-      if (i >= text.length) {
-        clearInterval(id);
-        onDone?.();
-      }
-    }, 12);
-    return () => clearInterval(id);
-  }, [text]);
-
-  return <>{text.slice(0, count)}</>;
+function TypingDots() {
+  return (
+    <div className="flex items-start gap-2.5">
+      <QaLogo size={28} />
+      <div className="rounded-2xl border border-card-border bg-card px-4 py-3 shadow-sm">
+        <span className="qa-typing-dots inline-flex gap-1">
+          <span />
+          <span />
+          <span />
+        </span>
+        <span className="ml-2 text-[10px] text-muted">Spark AI is typing…</span>
+      </div>
+    </div>
+  );
 }
+
+/** Lead capture form shown after 3 user messages */
+function LeadForm({ onDismiss }: { onDismiss: () => void }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
+  const [err, setErr] = useState("");
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    setErr("");
+    try {
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      const data = (await res.json()) as { ok?: boolean; error?: string };
+      if (!res.ok) {
+        setErr(data.error ?? "Something went wrong.");
+        setStatus("error");
+      } else {
+        setStatus("ok");
+      }
+    } catch {
+      setErr("Network error. Please try again.");
+      setStatus("error");
+    }
+  };
+
+  if (status === "ok") {
+    return (
+      <div className="mx-auto max-w-[88%] rounded-2xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-xs text-emerald-400">
+        ✅ Thanks! Kishore will get back to you soon.{" "}
+        <button onClick={onDismiss} className="ml-2 underline opacity-70">
+          Dismiss
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 text-xs">
+      <div className="mb-2 flex items-center justify-between">
+        <p className="font-semibold text-foreground">
+          💌 Want to share your details with Kishore?
+        </p>
+        <button
+          onClick={onDismiss}
+          className="text-muted hover:text-foreground"
+          aria-label="Dismiss"
+        >
+          <X size={14} />
+        </button>
+      </div>
+      <form onSubmit={submit} className="space-y-2">
+        <input
+          required
+          maxLength={100}
+          placeholder="Your name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full rounded-lg border border-card-border bg-background px-3 py-1.5 text-xs text-foreground placeholder:text-muted outline-none focus:border-primary/60"
+        />
+        <input
+          required
+          type="email"
+          maxLength={200}
+          placeholder="Your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full rounded-lg border border-card-border bg-background px-3 py-1.5 text-xs text-foreground placeholder:text-muted outline-none focus:border-primary/60"
+        />
+        <textarea
+          required
+          maxLength={500}
+          rows={2}
+          placeholder="Brief message or opportunity..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className="w-full rounded-lg border border-card-border bg-background px-3 py-1.5 text-xs text-foreground placeholder:text-muted outline-none focus:border-primary/60 resize-none"
+        />
+        {err && <p className="text-[10px] text-red-400">{err}</p>}
+        <div className="flex gap-2">
+          <button
+            type="submit"
+            disabled={status === "loading"}
+            className="flex-1 rounded-lg bg-primary py-1.5 text-xs font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
+          >
+            {status === "loading" ? "Sending…" : "Send"}
+          </button>
+          <button
+            type="button"
+            onClick={onDismiss}
+            className="rounded-lg border border-card-border px-3 py-1.5 text-xs text-muted hover:text-foreground"
+          >
+            Skip
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+/** Toast notification */
+function Toast({ msg, onClose }: { msg: string; onClose: () => void }) {
+  useEffect(() => {
+    const t = setTimeout(onClose, 3000);
+    return () => clearTimeout(t);
+  }, [onClose]);
+  return (
+    <div className="absolute bottom-16 left-1/2 -translate-x-1/2 rounded-full bg-emerald-600 px-4 py-1.5 text-[11px] font-semibold text-white shadow-lg z-10 whitespace-nowrap">
+      {msg}
+    </div>
+  );
+}
+
+// Mode pills shown in header
+const MODE_OPTIONS: { id: ChatMode; label: string; desc: string }[] = [
+  { id: "default", label: "💬 Chat", desc: "General Q&A" },
+  { id: "recruiter", label: "📋 Recruiter", desc: "Paste a JD to match skills" },
+  { id: "test_feature", label: "🧪 Test Feature", desc: "Generate test cases" },
+  { id: "bug_report", label: "🐞 Bug Report", desc: "Format a bug report" },
+  { id: "interview", label: "🎤 Interview", desc: "Mock QA interview" },
+  { id: "quiz", label: "🧠 Quiz", desc: "QA knowledge quiz" },
+];
+
+const LANG_OPTIONS: { id: Language; label: string }[] = [
+  { id: "en", label: "EN" },
+  { id: "te", label: "తె" },
+  { id: "hi", label: "हि" },
+];
+
+const LANG_INSTRUCTION: Record<Language, string> = {
+  en: "",
+  te: " Please reply in Telugu (తెలుగు).",
+  hi: " Please reply in Hindi (हिंदी).",
+};
+
+const MODE_PLACEHOLDER: Record<ChatMode, string> = {
+  default: "Ask about Kishore's resume…",
+  recruiter: "Paste the job description here…",
+  test_feature: "Enter a feature to test (e.g. 'login page')…",
+  bug_report: "Describe the bug in plain words…",
+  interview: "Type your answer to the question…",
+  quiz: "Type A, B, C, or D…",
+};
+
+// ── Main Component ───────────────────────────────────────────────────────────
 
 export default function QaAssistant() {
   const [open, setOpen] = useState(false);
@@ -91,26 +253,45 @@ export default function QaAssistant() {
   const [typing, setTyping] = useState(false);
   const [doneIds, setDoneIds] = useState<Set<string>>(new Set(["welcome"]));
   const [ttsEnabled, setTtsEnabled] = useState(false);
-  const [copiedCodeId, setCopiedCodeId] = useState<string | null>(null);
-  const [likedMsgIds, setLikedMsgIds] = useState<Set<string>>(new Set());
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<FeedbackState>({});
+  const [toast, setToast] = useState<string | null>(null);
+  const [mode, setMode] = useState<ChatMode>("default");
+  const [showModeMenu, setShowModeMenu] = useState(false);
+  const [lang, setLang] = useState<Language>("en");
+  const [userMsgCount, setUserMsgCount] = useState(0);
+  const [showLeadForm, setShowLeadForm] = useState(false);
+  const [leadDismissed, setLeadDismissed] = useState(false);
+  const [isListening, setIsListening] = useState(false);
 
   const listRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<{ stop: () => void } | null>(null);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     const el = listRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  };
+  }, []);
 
-  // Web Speech API text to speech
-  const speakText = (text: string) => {
-    if (!ttsEnabled || typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const cleanText = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, "");
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-    window.speechSynthesis.speak(utterance);
-  };
+  const speakText = useCallback(
+    (text: string) => {
+      if (
+        !ttsEnabled ||
+        typeof window === "undefined" ||
+        !("speechSynthesis" in window)
+      )
+        return;
+      window.speechSynthesis.cancel();
+      const clean = text.replace(
+        /[\u{1F600}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,
+        ""
+      );
+      const utt = new SpeechSynthesisUtterance(clean);
+      utt.rate = 1.0;
+      utt.pitch = 1.0;
+      window.speechSynthesis.speak(utt);
+    },
+    [ttsEnabled]
+  );
 
   const openChat = () => {
     const welcome = getWelcomeMessage();
@@ -118,6 +299,8 @@ export default function QaAssistant() {
     setDoneIds(new Set([welcome.id]));
     setInput("");
     setTyping(false);
+    setUserMsgCount(0);
+    setShowLeadForm(false);
     setOpen(true);
     window.dispatchEvent(new CustomEvent("qa-chat-open"));
   };
@@ -129,7 +312,7 @@ export default function QaAssistant() {
 
   useEffect(() => {
     if (open) scrollToBottom();
-  }, [open, messages, typing]);
+  }, [open, messages, typing, scrollToBottom]);
 
   useEffect(() => {
     const onClose = () => setOpen(false);
@@ -137,7 +320,7 @@ export default function QaAssistant() {
     return () => window.removeEventListener("qa-chat-close", onClose);
   }, []);
 
-  // Lock body scroll on mobile when chat overlay is open
+  // Lock body scroll on mobile
   useEffect(() => {
     if (!open) return;
     const html = document.documentElement;
@@ -146,66 +329,121 @@ export default function QaAssistant() {
     const prevBody = body.style.overflow;
     html.style.overflow = "hidden";
     body.style.overflow = "hidden";
-
     return () => {
       html.style.overflow = prevHtml;
       body.style.overflow = prevBody;
     };
   }, [open]);
 
-  const markDone = (id: string, textToSpeak?: string) => {
-    setDoneIds((prev) => {
-      if (prev.has(id)) return prev;
-      const next = new Set(prev);
-      next.add(id);
-      return next;
-    });
-    if (textToSpeak) speakText(textToSpeak);
-  };
+  const markDone = useCallback(
+    (id: string, textToSpeak?: string) => {
+      setDoneIds((prev) => {
+        if (prev.has(id)) return prev;
+        const next = new Set(prev);
+        next.add(id);
+        return next;
+      });
+      if (textToSpeak) speakText(textToSpeak);
+    },
+    [speakText]
+  );
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
-    setCopiedCodeId(id);
-    setTimeout(() => setCopiedCodeId(null), 2000);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const toggleLikeMessage = (id: string) => {
-    setLikedMsgIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+  const saveFeedback = async (msgId: string, vote: "up" | "down") => {
+    const prev = feedback[msgId];
+    if (prev === vote) return; // already voted
+    setFeedback((f) => ({ ...f, [msgId]: vote }));
+    setToast(vote === "up" ? "👍 Marked as helpful!" : "👎 Thanks for the feedback!");
+    try {
+      await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ msgId, vote }),
+      });
+    } catch {
+      // silent — feedback is best-effort
+    }
   };
 
-  const sendMessage = async (text: string) => {
+  // Speech-to-text toggle
+  const toggleListening = () => {
+    if (typeof window === "undefined") return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SR: (new () => { lang: string; continuous: boolean; interimResults: boolean; onresult: ((e: { results: { [n: number]: { [n: number]: { transcript: string } } } }) => void) | null; onerror: (() => void) | null; onend: (() => void) | null; start: () => void; stop: () => void }) | undefined =
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).SpeechRecognition ||
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).webkitSpeechRecognition;
+    if (!SR) {
+      setToast("Speech recognition not supported in this browser.");
+      return;
+    }
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+      return;
+    }
+    const rec = new SR();
+    rec.lang = lang === "te" ? "te-IN" : lang === "hi" ? "hi-IN" : "en-US";
+    rec.continuous = false;
+    rec.interimResults = false;
+    rec.onresult = (e) => {
+      const transcript = e.results[0]?.[0]?.transcript ?? "";
+      setInput((prev) => prev + transcript);
+      setIsListening(false);
+    };
+    rec.onerror = () => setIsListening(false);
+    rec.onend = () => setIsListening(false);
+    recognitionRef.current = rec;
+    rec.start();
+    setIsListening(true);
+  };
+
+  const sendMessage = async (text: string, overrideMode?: ChatMode) => {
     const trimmed = text.trim();
     if (!trimmed || typing) return;
+
+    const effectiveMode = overrideMode ?? mode;
+    const langSuffix = LANG_INSTRUCTION[lang];
+    const finalText = langSuffix ? trimmed + langSuffix : trimmed;
 
     const userMsg: QaMessage = {
       id: crypto.randomUUID(),
       role: "user",
-      text: trimmed,
+      text: trimmed, // display original (no lang instruction)
     };
     setMessages((prev) => [...prev, userMsg]);
     markDone(userMsg.id);
     setInput("");
     setTyping(true);
 
+    // Lead form trigger after 3 user messages
+    const newCount = userMsgCount + 1;
+    setUserMsgCount(newCount);
+    if (newCount === 3 && !leadDismissed) {
+      setTimeout(() => setShowLeadForm(true), 1500);
+    }
+
     const history = messages
       .filter((m) => m.role === "user" || m.role === "assistant")
       .filter((m) => m.id !== "welcome" && !m.id.startsWith("outro"))
       .slice(-8)
-      .map((m) => ({
-        role: m.role as "user" | "assistant",
-        content: m.text,
-      }));
+      .map((m) => ({ role: m.role as "user" | "assistant", content: m.text }));
 
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: trimmed, history }),
+        body: JSON.stringify({
+          message: finalText,
+          history,
+          mode: effectiveMode,
+        }),
       });
 
       if (res.ok && res.body) {
@@ -242,7 +480,6 @@ export default function QaAssistant() {
       const replyMsg = getAssistantReply(trimmed);
       setTyping(false);
       setMessages((prev) => [...prev, replyMsg]);
-
       const typingDuration = Math.min(replyMsg.text.length * 6, 3500) + 500;
       window.setTimeout(() => {
         setMessages((prev) => [...prev, getOutroMessage()]);
@@ -250,11 +487,14 @@ export default function QaAssistant() {
     }, 350);
   };
 
+  const currentModeInfo =
+    MODE_OPTIONS.find((m) => m.id === mode) ?? MODE_OPTIONS[0];
+
   return (
     <>
-      {/* OPEN CHATBOT MODAL OVERLAY — CHATGPT / GEMINI MOBILE UX */}
+      {/* ── CHAT WINDOW ── */}
       {open && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-card text-foreground sm:inset-auto sm:right-6 sm:bottom-6 sm:h-[min(580px,calc(100vh-5rem))] sm:w-[380px] sm:rounded-2xl sm:border sm:border-card-border sm:shadow-2xl overflow-hidden">
+        <div className="fixed inset-0 z-50 flex flex-col bg-card text-foreground sm:inset-auto sm:right-6 sm:bottom-6 sm:h-[min(640px,calc(100vh-5rem))] sm:w-[400px] sm:rounded-2xl sm:border sm:border-card-border sm:shadow-2xl overflow-hidden">
           {/* Header */}
           <header className="flex h-14 shrink-0 items-center justify-between border-b border-card-border/60 bg-card px-4 py-3">
             <div className="flex items-center gap-2.5">
@@ -275,17 +515,40 @@ export default function QaAssistant() {
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1">
+              {/* Language toggle */}
+              <div className="flex items-center gap-0.5 rounded-lg border border-card-border bg-background px-1 py-0.5">
+                <Globe size={10} className="text-muted" />
+                {LANG_OPTIONS.map((l) => (
+                  <button
+                    key={l.id}
+                    onClick={() => setLang(l.id)}
+                    className={`rounded px-1.5 py-0.5 text-[9px] font-bold transition ${
+                      lang === l.id
+                        ? "bg-primary text-white"
+                        : "text-muted hover:text-foreground"
+                    }`}
+                  >
+                    {l.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* TTS toggle */}
               <button
                 type="button"
                 onClick={() => setTtsEnabled(!ttsEnabled)}
                 className={`flex h-8 w-8 items-center justify-center rounded-lg transition ${
-                  ttsEnabled ? "bg-primary/20 text-primary-light" : "text-muted hover:bg-muted/10 hover:text-foreground"
+                  ttsEnabled
+                    ? "bg-primary/20 text-primary-light"
+                    : "text-muted hover:bg-muted/10 hover:text-foreground"
                 }`}
-                title={ttsEnabled ? "Voice Speech ON" : "Voice Speech OFF"}
+                title={ttsEnabled ? "Voice ON" : "Voice OFF"}
               >
-                {ttsEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                {ttsEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
               </button>
+
+              {/* Close */}
               <button
                 type="button"
                 onClick={closeChat}
@@ -297,20 +560,77 @@ export default function QaAssistant() {
             </div>
           </header>
 
-          {/* Messages Feed */}
+          {/* Mode selector strip */}
+          <div className="relative shrink-0 border-b border-card-border/40 bg-card/80 px-3 py-1.5">
+            <button
+              onClick={() => setShowModeMenu(!showModeMenu)}
+              className="flex items-center gap-1.5 rounded-lg border border-card-border bg-background px-2.5 py-1 text-[11px] font-semibold text-foreground transition hover:border-primary/40"
+            >
+              <span>{currentModeInfo.label}</span>
+              <ChevronDown size={11} className={showModeMenu ? "rotate-180 transition" : "transition"} />
+            </button>
+            {showModeMenu && (
+              <div className="absolute left-3 top-full z-20 mt-1 w-64 rounded-xl border border-card-border bg-card shadow-xl">
+                {MODE_OPTIONS.map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => {
+                      setMode(m.id);
+                      setShowModeMenu(false);
+                      if (m.id !== "default") {
+                        const startMsg: QaMessage = {
+                          id: crypto.randomUUID(),
+                          role: "assistant",
+                          text:
+                            m.id === "recruiter"
+                              ? "📋 Recruiter Mode — paste a job description and I'll match Kishore's skills against it."
+                              : m.id === "test_feature"
+                              ? "🧪 Test Feature Mode — enter a feature name and I'll generate test cases."
+                              : m.id === "bug_report"
+                              ? "🐞 Bug Report Mode — describe the bug in plain words and I'll format a professional report."
+                              : m.id === "interview"
+                              ? "🎤 Mock Interview Mode — I'll ask 5 QA questions one at a time. Ready? Let's start!\n\nQ1: What is the difference between Severity and Priority in bug tracking?"
+                              : "🧠 QA Quiz — 5 questions, pick A/B/C/D. Let's go!\n\nQ1: Which testing type verifies that a bug fix hasn't broken other features?\nA) Smoke Testing\nB) Regression Testing\nC) Sanity Testing\nD) UAT",
+                        };
+                        setMessages((prev) => [...prev, startMsg]);
+                      }
+                    }}
+                    className={`flex w-full items-start gap-2 px-3 py-2 text-left text-xs transition hover:bg-primary/10 first:rounded-t-xl last:rounded-b-xl ${
+                      mode === m.id ? "bg-primary/10 text-primary-light font-semibold" : "text-foreground"
+                    }`}
+                  >
+                    <span className="shrink-0 text-[13px]">{m.label.split(" ")[0]}</span>
+                    <div>
+                      <p className="font-semibold">{m.label.slice(2)}</p>
+                      <p className="text-[10px] text-muted">{m.desc}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Messages feed */}
           <div
             ref={listRef}
-            className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3.5 py-4 space-y-4"
+            className="relative flex-1 min-h-0 overflow-y-auto overscroll-contain px-3.5 py-4 space-y-4"
+            onClick={() => setShowModeMenu(false)}
           >
+            {toast && (
+              <Toast msg={toast} onClose={() => setToast(null)} />
+            )}
+
             {messages.map((msg) => {
               const isUser = msg.role === "user";
               const isDone = doneIds.has(msg.id);
-              const isLiked = likedMsgIds.has(msg.id);
+              const msgFeedback = feedback[msg.id];
 
               return (
                 <div
                   key={msg.id}
-                  className={`flex items-start gap-2.5 ${isUser ? "justify-end" : "justify-start"}`}
+                  className={`flex items-start gap-2.5 ${
+                    isUser ? "justify-end" : "justify-start"
+                  }`}
                 >
                   {!isUser && <QaLogo size={28} />}
                   <div
@@ -320,29 +640,27 @@ export default function QaAssistant() {
                         : "border border-card-border bg-card text-foreground"
                     }`}
                   >
-                    {isUser ? (
-                      msg.text
-                    ) : msg.live ? (
-                      msg.text
-                    ) : (
-                      <TypedText
-                        text={msg.text}
-                        onUpdate={scrollToBottom}
-                        onDone={() => markDone(msg.id, msg.text)}
-                      />
-                    )}
+                    {msg.text}
 
-                    {/* Code Snippet Box */}
+                    {/* Code snippet */}
                     {!isUser && isDone && msg.codeSnippet && (
                       <div className="mt-3 overflow-hidden rounded-xl border border-card-border bg-black/90 p-3 font-mono text-[11px] text-emerald-400">
                         <div className="flex items-center justify-between border-b border-white/10 pb-1.5 mb-2 text-[10px] text-muted">
-                          <span className="flex items-center gap-1 font-semibold"><Code size={12} /> Playwright / API Spec</span>
+                          <span className="flex items-center gap-1 font-semibold">
+                            <Code size={12} /> Playwright / API Spec
+                          </span>
                           <button
-                            onClick={() => copyToClipboard(msg.codeSnippet!, msg.id)}
+                            onClick={() =>
+                              copyToClipboard(msg.codeSnippet!, `code-${msg.id}`)
+                            }
                             className="flex items-center gap-1 rounded px-2 py-0.5 bg-white/10 text-white hover:bg-white/20 transition text-[10px]"
                           >
-                            {copiedCodeId === msg.id ? <Check size={11} /> : <Copy size={11} />}
-                            {copiedCodeId === msg.id ? "Copied" : "Copy Code"}
+                            {copiedId === `code-${msg.id}` ? (
+                              <Check size={11} />
+                            ) : (
+                              <Copy size={11} />
+                            )}
+                            {copiedId === `code-${msg.id}` ? "Copied" : "Copy"}
                           </button>
                         </div>
                         <pre className="overflow-x-auto whitespace-pre-wrap leading-relaxed">
@@ -351,7 +669,7 @@ export default function QaAssistant() {
                       </div>
                     )}
 
-                    {/* Project Cards */}
+                    {/* Project cards */}
                     {!isUser && isDone && msg.cards && msg.cards.length > 0 && (
                       <div className="mt-3 space-y-2">
                         {msg.cards.map((card) => (
@@ -374,7 +692,9 @@ export default function QaAssistant() {
                             </div>
                             <a
                               href={card.href}
-                              target={card.href.startsWith("http") ? "_blank" : undefined}
+                              target={
+                                card.href.startsWith("http") ? "_blank" : undefined
+                              }
                               rel="noopener noreferrer"
                               className="mt-2.5 inline-flex text-[11px] font-semibold text-primary-light hover:underline"
                             >
@@ -385,19 +705,23 @@ export default function QaAssistant() {
                       </div>
                     )}
 
-                    {/* Action Links */}
+                    {/* Action links */}
                     {!isUser && isDone && msg.links && msg.links.length > 0 && (
                       <div className="mt-3 flex flex-wrap gap-1.5">
                         {msg.links.map((link) => (
                           <a
                             key={link.label}
                             href={link.href}
-                            target={link.href.startsWith("http") ? "_blank" : undefined}
+                            target={
+                              link.href.startsWith("http") ? "_blank" : undefined
+                            }
                             rel="noopener noreferrer"
                             download={link.download ? true : undefined}
                             onClick={() => {
                               if (link.href.startsWith("#")) {
-                                window.dispatchEvent(new CustomEvent("qa-chat-close"));
+                                window.dispatchEvent(
+                                  new CustomEvent("qa-chat-close")
+                                );
                               }
                             }}
                             className="inline-flex rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold text-primary-light transition hover:bg-primary/20"
@@ -408,22 +732,41 @@ export default function QaAssistant() {
                       </div>
                     )}
 
-                    {/* Interactive Like & Copy */}
+                    {/* Feedback + copy row */}
                     {!isUser && isDone && (
-                      <div className="mt-2.5 flex items-center justify-end gap-2 border-t border-card-border/30 pt-1.5 text-[10px] text-muted">
+                      <div className="mt-2.5 flex items-center justify-end gap-1.5 border-t border-card-border/30 pt-1.5 text-[10px] text-muted">
                         <button
-                          onClick={() => toggleLikeMessage(msg.id)}
+                          onClick={() => saveFeedback(msg.id, "up")}
                           className={`flex items-center gap-1 px-1.5 py-0.5 rounded transition ${
-                            isLiked ? "text-primary-light bg-primary/10 font-bold" : "hover:text-foreground"
+                            msgFeedback === "up"
+                              ? "text-primary-light bg-primary/10 font-bold"
+                              : "hover:text-foreground"
                           }`}
+                          title="Helpful"
                         >
-                          <ThumbsUp size={11} /> {isLiked ? "Helpful" : ""}
+                          <ThumbsUp size={11} />
+                        </button>
+                        <button
+                          onClick={() => saveFeedback(msg.id, "down")}
+                          className={`flex items-center gap-1 px-1.5 py-0.5 rounded transition ${
+                            msgFeedback === "down"
+                              ? "text-red-400 bg-red-400/10 font-bold"
+                              : "hover:text-foreground"
+                          }`}
+                          title="Not helpful"
+                        >
+                          <ThumbsDown size={11} />
                         </button>
                         <button
                           onClick={() => copyToClipboard(msg.text, msg.id)}
                           className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:text-foreground transition"
+                          title="Copy message"
                         >
-                          {copiedCodeId === msg.id ? <Check size={11} /> : <Copy size={11} />}
+                          {copiedId === msg.id ? (
+                            <Check size={11} />
+                          ) : (
+                            <Copy size={11} />
+                          )}
                         </button>
                       </div>
                     )}
@@ -432,42 +775,58 @@ export default function QaAssistant() {
               );
             })}
 
-            {typing && (
-              <div className="flex items-start gap-2.5">
-                <QaLogo size={28} />
-                <div className="rounded-2xl border border-card-border bg-card px-4 py-3 shadow-sm">
-                  <span className="qa-typing-dots inline-flex gap-1">
-                    <span />
-                    <span />
-                    <span />
-                  </span>
-                </div>
-              </div>
+            {typing && <TypingDots />}
+
+            {/* Lead capture form */}
+            {showLeadForm && !leadDismissed && (
+              <LeadForm
+                onDismiss={() => {
+                  setShowLeadForm(false);
+                  setLeadDismissed(true);
+                }}
+              />
             )}
           </div>
 
-          {/* ChatGPT / Gemini Style Bottom Prompt Capsule Bar */}
-          <div className="shrink-0 p-3 sm:p-4 border-t border-card-border/60 bg-card space-y-2.5">
-            <div className="flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-hide">
+          {/* Bottom: chips + input */}
+          <div className="shrink-0 border-t border-card-border/60 bg-card">
+            {/* Suggestion chips — 2 wrapped rows */}
+            <div className="flex flex-wrap gap-1.5 px-3 pt-2.5 pb-1">
               {SUGGESTIONS.map((s) => (
                 <button
                   key={s.label}
                   type="button"
                   onClick={() => sendMessage(s.query)}
-                  className="shrink-0 rounded-full border border-card-border bg-background px-3 py-1 text-[11px] font-semibold text-muted transition hover:border-primary/50 hover:text-primary-light hover:bg-primary/5"
+                  className="rounded-full border border-card-border bg-background px-2.5 py-1 text-[10px] font-semibold text-muted transition hover:border-primary/50 hover:text-primary-light hover:bg-primary/5"
                 >
                   {s.label}
                 </button>
               ))}
             </div>
 
+            {/* Input bar */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 sendMessage(input);
               }}
-              className="relative flex items-center rounded-2xl border border-card-border bg-background px-3.5 py-1.5 shadow-sm focus-within:border-primary/70 transition"
+              className="relative flex items-center gap-1.5 rounded-2xl border border-card-border bg-background mx-3 mb-3 mt-1.5 px-3 py-1.5 shadow-sm focus-within:border-primary/70 transition"
             >
+              {/* Speech-to-text */}
+              <button
+                type="button"
+                onClick={toggleListening}
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition ${
+                  isListening
+                    ? "bg-red-500/20 text-red-400 animate-pulse"
+                    : "text-muted hover:text-foreground"
+                }`}
+                title={isListening ? "Stop recording" : "Voice input"}
+                aria-label="Voice input"
+              >
+                {isListening ? <MicOff size={13} /> : <Mic size={13} />}
+              </button>
+
               <input
                 type="text"
                 inputMode="text"
@@ -477,11 +836,12 @@ export default function QaAssistant() {
                 spellCheck={false}
                 enterKeyHint="send"
                 name="qa-assistant-input"
+                maxLength={1200}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onFocus={() => setTimeout(scrollToBottom, 150)}
-                placeholder="Ask about Kishore's resume..."
-                className="flex-1 bg-transparent py-1.5 pr-2 text-xs sm:text-sm text-foreground outline-none placeholder:text-muted"
+                placeholder={MODE_PLACEHOLDER[mode]}
+                className="flex-1 bg-transparent py-1 pr-1 text-xs sm:text-sm text-foreground outline-none placeholder:text-muted"
               />
               <button
                 type="submit"
@@ -496,7 +856,7 @@ export default function QaAssistant() {
         </div>
       )}
 
-      {/* FAB Floating Launcher */}
+      {/* ── FAB LAUNCHER ── */}
       {!open && (
         <div className="fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6">
           <div className="qa-assistant-fab-wrap ml-auto">
