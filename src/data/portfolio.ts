@@ -55,7 +55,7 @@ export const portfolioData = {
   // ----- Social links (used in hero & contact) -----
   social: {
     linkedin: "https://www.linkedin.com/in/kishorekumarrasalay",
-    github: "https://github.com/kishorekumarrasalay-02",
+    github: "https://github.com/kishorekumarrasalay",
     email: "kishorekumarrasalay05@gmail.com",
   },
 
@@ -306,7 +306,7 @@ export const portfolioData = {
         title: "HiKode Test Automation Framework",
         status: "In Progress" as const,
         githubUrl:
-          "https://github.com/kishorekumarrasalay-02/hikode-playwright-automation",
+          "https://github.com/kishorekumarrasalay/hikode-playwright-automation",
         description:
           "A self-driven automation testing project built on HiKode, a job application and professional networking platform. As a Manual Tester by profession, I started this project independently to build hands-on automation skills and work toward transitioning into an SDET role.",
         buildingTitle: "What I'm Building",
@@ -364,8 +364,8 @@ export const portfolioData = {
       },
       {
         label: "GitHub",
-        value: "kishorekumarrasalay-02",
-        href: "https://github.com/kishorekumarrasalay-02",
+        value: "kishorekumarrasalay",
+        href: "https://github.com/kishorekumarrasalay",
         type: "github" as const,
         emoji: "🐙",
       },

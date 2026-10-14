@@ -1,6 +1,6 @@
 # Kishore Kumar — QA Portfolio
 
-[![CI](https://github.com/kishorekumarrasalay-02/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/kishorekumarrasalay-02/portfolio/actions/workflows/ci.yml)
+[![CI](https://github.com/kishorekumarrasalay/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/kishorekumarrasalay/portfolio/actions/workflows/ci.yml)
 
 Quality Analyst portfolio (manual testing → SDET path) built with Next.js 16, Tailwind CSS v4, and Framer Motion.
 
