@@ -77,10 +77,10 @@ export const portfolioData = {
   // ----- Metrics band (below hero) — edit values here -----
   metrics: {
     items: [
-      { label: "Bugs logged", value: 70, suffix: "+", prefix: "" },
-      { label: "Test cases written", value: 150, suffix: "+", prefix: "" },
+      { label: "Bugs logged", value: 120, suffix: "+", prefix: "" },
+      { label: "Test cases written", value: 350, suffix: "+", prefix: "" },
       { label: "Products tested", value: 2, suffix: "", prefix: "" },
-      { label: "Months experience", value: 4, suffix: "", prefix: "" },
+      { label: "Months experience", value: 6, suffix: "+", prefix: "" },
     ],
   },
 
