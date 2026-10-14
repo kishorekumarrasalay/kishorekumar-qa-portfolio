@@ -1,0 +1,86 @@
+{
+  "suite": {
+    "title": "HiKode Candidate Workflow E2E Regression",
+    "project": "HiKode Platform",
+    "framework": "Playwright v1.48.0 (TypeScript)",
+    "browser": "chromium",
+    "headless": true,
+    "viewport": { "width": 1280, "height": 720 },
+    "executionDate": "2026-03-24T10:15:00Z",
+    "durationMs": 3480,
+    "totalTests": 8,
+    "passed": 7,
+    "failed": 1,
+    "skipped": 0,
+    "status": "failed",
+    "environment": "MOCK Staging Sandbox",
+    "note": "Sample run: Generated from HiKode automation suite. Replace this JSON with your actual Playwright framework test-results.json anytime."
+  },
+  "tests": [
+    {
+      "id": "PW-HK-01",
+      "name": "Candidate Auth: Verify successful login with valid credentials",
+      "file": "tests/e2e/auth.spec.ts",
+      "status": "passed",
+      "durationMs": 412,
+      "steps": [
+        { "action": "page.goto('/login')", "locator": "url: /login", "durationMs": 140, "status": "passed" },
+        { "action": "page.getByLabel('Email Address').fill('kishore.qa@example.com')", "locator": "getByLabel('Email Address')", "durationMs": 85, "status": "passed" },
+        { "action": "page.getByLabel('Password').fill('••••••••')", "locator": "getByLabel('Password')", "durationMs": 62, "status": "passed" },
+        { "action": "page.getByRole('button', { name: 'Sign In' }).click()", "locator": "getByRole('button', { name: 'Sign In' })", "durationMs": 75, "status": "passed" },
+        { "action": "expect(page).toHaveURL(/.*dashboard/)", "locator": "page URL assertion", "durationMs": 50, "status": "passed" }
+      ]
+    },
+    {
+      "id": "PW-HK-02",
+      "name": "Job Search: Filter listings by title and location keyword",
+      "file": "tests/e2e/jobs.spec.ts",
+      "status": "passed",
+      "durationMs": 520,
+      "steps": [
+        { "action": "page.goto('/jobs')", "locator": "url: /jobs", "durationMs": 180, "status": "passed" },
+        { "action": "page.getByPlaceholder('Search jobs by title...').fill('QA Engineer')", "locator": "getByPlaceholder('Search jobs by title...')", "durationMs": 95, "status": "passed" },
+        { "action": "page.keyboard.press('Enter')", "locator": "keyboard Enter", "durationMs": 45, "status": "passed" },
+        { "action": "expect(page.getByTestId('job-card')).toHaveCount(4)", "locator": "getByTestId('job-card')", "durationMs": 200, "status": "passed" }
+      ]
+    },
+    {
+      "id": "PW-HK-03",
+      "name": "Application Flow: Prevent duplicate application submission",
+      "file": "tests/e2e/apply.spec.ts",
+      "status": "failed",
+      "durationMs": 680,
+      "error": "Error: Timed out 5000ms waiting for expect(locator).toBeDisabled()\nExpected: disabled\nReceived: enabled\nLocator: getByRole('button', { name: 'Apply Now' })",
+      "steps": [
+        { "action": "page.goto('/jobs/devops-lead')", "locator": "url: /jobs/devops-lead", "durationMs": 190, "status": "passed" },
+        { "action": "page.getByRole('button', { name: 'Apply Now' }).click()", "locator": "getByRole('button', { name: 'Apply Now' })", "durationMs": 90, "status": "passed" },
+        { "action": "expect(page.getByText('Application Submitted')).toBeVisible()", "locator": "getByText('Application Submitted')", "durationMs": 110, "status": "passed" },
+        { "action": "expect(page.getByRole('button', { name: 'Apply Now' })).toBeDisabled()", "locator": "getByRole('button', { name: 'Apply Now' })", "durationMs": 290, "status": "failed" }
+      ]
+    },
+    {
+      "id": "PW-HK-04",
+      "name": "Resume Upload: Reject disallowed binary format (.exe)",
+      "file": "tests/e2e/profile.spec.ts",
+      "status": "passed",
+      "durationMs": 440,
+      "steps": [
+        { "action": "page.goto('/profile/resume')", "locator": "url: /profile/resume", "durationMs": 150, "status": "passed" },
+        { "action": "page.setInputFiles('#resume-input', 'mock_payload.exe')", "locator": "#resume-input", "durationMs": 120, "status": "passed" },
+        { "action": "expect(page.getByTestId('upload-error')).toContainText('Invalid file format')", "locator": "getByTestId('upload-error')", "durationMs": 170, "status": "passed" }
+      ]
+    },
+    {
+      "id": "PW-HK-05",
+      "name": "Profile Settings: Graceful handling of avatar reset",
+      "file": "tests/e2e/profile.spec.ts",
+      "status": "passed",
+      "durationMs": 390,
+      "steps": [
+        { "action": "page.goto('/settings/profile')", "locator": "url: /settings/profile", "durationMs": 160, "status": "passed" },
+        { "action": "page.getByRole('button', { name: 'Remove Avatar' }).click()", "locator": "getByRole('button', { name: 'Remove Avatar' })", "durationMs": 80, "status": "passed" },
+        { "action": "expect(page.getByTestId('avatar-status')).toHaveText('No avatar')", "locator": "getByTestId('avatar-status')", "durationMs": 150, "status": "passed" }
+      ]
+    }
+  ]
+}

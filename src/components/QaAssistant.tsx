@@ -316,8 +316,19 @@ export default function QaAssistant() {
 
   useEffect(() => {
     const onClose = () => setOpen(false);
+    const onOpenPrompt = (e: Event) => {
+      const customEvent = e as CustomEvent<{ prompt?: string }>;
+      setOpen(true);
+      if (customEvent.detail?.prompt) {
+        setInput(customEvent.detail.prompt);
+      }
+    };
     window.addEventListener("qa-chat-close", onClose);
-    return () => window.removeEventListener("qa-chat-close", onClose);
+    window.addEventListener("qa-chat-open-prompt", onOpenPrompt);
+    return () => {
+      window.removeEventListener("qa-chat-close", onClose);
+      window.removeEventListener("qa-chat-open-prompt", onOpenPrompt);
+    };
   }, []);
 
   // Lock body scroll on mobile
