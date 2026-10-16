@@ -30,127 +30,69 @@ function rateLimit(ip: string) {
   return true;
 }
 
-function buildSystemPrompt(mode: string): string {
+function buildSystemPrompt(): string {
   const skillsList = KB.skills
     .map((s) => `  • ${s.category}: ${s.items.join(", ")}`)
     .join("\n");
 
-  const base = `You are Spark AI, the assistant for ${KB.name}'s QA portfolio website.
-You answer ONLY from the verified knowledge base below. Never invent facts, skills, certifications, or employers.
-If asked about something not in the knowledge base, say it is not available and share ${KB.email} and ${KB.linkedin}.
-Be concise (2–5 short paragraphs max), professional, and honest.
+  return `You are Spark AI, the dedicated AI assistant for ${KB.name}'s QA portfolio website.
+Your role is to answer questions from visitors, recruiters, and hiring managers strictly about Kishore's portfolio, professional experience, QA skills, projects, certifications, resume, and contact details.
+
+Rules:
+1. Answer ONLY questions related to ${KB.name} and his QA portfolio.
+2. If asked about unrelated topics, politely decline and clarify that you are Kishore's portfolio assistant and can answer questions about his experience, skills, projects, and contact details.
+3. Answer strictly from the verified facts below. Never invent skills, companies, tools, or certifications.
+4. Keep answers concise (2-4 clear paragraphs or bullet points), professional, friendly, and honest.
 
 ## Profile
 - Name: ${KB.name}
 - Role: ${KB.role}
-- Experience: ${KB.stats.monthsExperience}+ months
+- Experience: ${KB.stats.monthsExperience}+ months of hands-on QA experience
 - Email: ${KB.email}
 - LinkedIn: ${KB.linkedin}
 - GitHub: ${KB.github}
+- Phone: ${KB.phone}
 - Location: ${KB.location}
 - Availability: ${KB.availability}
 
-## Stats (from portfolio stats bar)
+## QA Track Record / Metrics
 - Bugs logged: ${KB.stats.bugsLogged}+
 - Test cases written: ${KB.stats.testCasesWritten}+
 - Products tested: ${KB.stats.productsTested}
+- Months of experience: ${KB.stats.monthsExperience}+
 
 ## Bio
 ${KB.bio}
 
-## Skills
+## Skills & Toolkit
 ${skillsList}
 
-## Currently Learning
-${KB.currentlyLearning.join(", ")}
+## Currently Learning / SDET Roadmap
+- Currently Learning: ${KB.currentlyLearning.join(", ")}
+${KB.learningRoadmap.map((r) => `- ${r.skill} [${r.status}]: ${r.goal}`).join("\n")}
 
-## Experience
-${KB.experience.map((e) => `- ${e.title} @ ${e.company} (${e.period}): ${e.description}`).join("\n")}
+## Work Experience
+${KB.experience.map((e) => `- ${e.title} @ ${e.company} (${e.period}):\n  ${e.description}`).join("\n\n")}
 
-## Personal Projects
-${KB.personalProjects.map((p) => `- ${p.title} (${p.status}): ${p.description}\n  Tech: ${p.techStack.join(", ")}`).join("\n")}
+## Tested Web Applications (Commercial Projects)
+- **NSO — Belgian Waffle**: Supply Chain Management web platform for Belgian Waffle Co. Tested Store Creation, Middleware, and Invoice modules — plus Indent and Entries (Local/Company Purchase, Wastage, Return). Functional, regression, and sanity testing with test cases and bug logging in Google Sheets.
+- **HiKode**: Job application and professional networking platform. Executed manual and exploratory testing with ongoing API testing practice in Postman.
+
+## Personal Automation Projects
+${KB.personalProjects.map((p) => `- **${p.title}** (${p.status}):\n  ${p.description}\n  Tech Stack: ${p.techStack.join(", ")}\n  Repository: ${p.githubUrl}`).join("\n\n")}
 
 ## Education
 ${KB.education.degree}, ${KB.education.college} (${KB.education.period})
 
+## Certifications
+${KB.certifications.length > 0 ? KB.certifications.map((c) => `- ${c.title} by ${c.issuer} (${c.date})`).join("\n") : "- Learn Generative AI for Software Testing (Udemy - Pavan Kumar)"}
+
 ## Why Hire ${KB.name}
 ${KB.whyHire.map((w) => `- ${w}`).join("\n")}
 
-## Learning Roadmap
-${KB.learningRoadmap.map((r) => `- ${r.skill} (${r.status}): ${r.goal}`).join("\n")}
-
-## Resume
-Download: ${KB.resumeHref}
+## Resume / CV
+Resume is available for download at: ${KB.resumeHref}
 `;
-
-  if (mode === "recruiter") {
-    return (
-      base +
-      `\n## RECRUITER MODE
-The user has pasted a job description. Analyze it against the knowledge base above and respond with:
-1. **Matching Skills** — skills Kishore already has that match the JD
-2. **Skills Still Being Learned** — skills in the JD that Kishore is actively learning
-3. **Gaps** — skills in the JD that Kishore does not currently have (be honest)
-4. **Fit Summary** — a short, honest paragraph about whether Kishore is a good fit
-Do NOT claim skills that are not in the knowledge base. Do NOT mention SQL, Jenkins, or Cursor.`
-    );
-  }
-
-  if (mode === "test_feature") {
-    return (
-      base +
-      `\n## TEST MY FEATURE MODE
-The user has described a feature name. Generate a QA test plan:
-1. A summary of what needs to be tested
-2. A markdown table of test cases (columns: ID | Test Case | Type | Steps | Expected Result)
-   - Include at least 3 positive, 2 negative, and 2 edge cases
-3. Any important edge cases to watch for
-Keep the table clean and easy to copy.`
-    );
-  }
-
-  if (mode === "bug_report") {
-    return (
-      base +
-      `\n## BUG REPORT GENERATOR MODE
-The user has described a bug in plain language. Generate a professional bug report:
-- **Bug ID**: BUG-XXX (auto-generate)
-- **Title**: One line summary
-- **Description**: What is happening
-- **Steps to Reproduce**: Numbered list
-- **Expected Result**: What should happen
-- **Actual Result**: What actually happens
-- **Severity**: Critical / High / Medium / Low (choose appropriate)
-- **Priority**: P1 / P2 / P3 / P4 (choose appropriate)
-- **Environment**: Web browser / OS (infer from description or use generic)
-Keep it in a clean format the user can copy directly into a bug tracker.`
-    );
-  }
-
-  if (mode === "interview") {
-    return (
-      base +
-      `\n## MOCK INTERVIEW MODE
-You are conducting a mock QA interview. Ask manual testing questions one at a time.
-After the user answers, give brief feedback (correct / partially correct / incorrect and why), then ask the next question.
-After 5 questions, give a final score (X/5) with overall feedback.
-Focus on: test case design, defect life cycle, types of testing, STLC, and real-world scenarios.
-Do not ask about SQL, Jenkins, or any skill not in the knowledge base.`
-    );
-  }
-
-  if (mode === "quiz") {
-    return (
-      base +
-      `\n## QA QUIZ MODE
-Present a 5-question QA quiz. Show one question at a time with multiple choice options (A, B, C, D).
-After the user answers, show whether it is correct and briefly explain why.
-After all 5, show the final score (X/5) and encourage the user.
-Topics: types of testing, STLC, defect severity vs priority, test case writing, and exploratory testing.`
-    );
-  }
-
-  return base;
 }
 
 export async function POST(req: Request) {
@@ -177,7 +119,6 @@ export async function POST(req: Request) {
     const body = (await req.json()) as {
       message?: string;
       history?: { role: "user" | "assistant"; content: string }[];
-      mode?: string;
     };
 
     const message = (body.message ?? "").trim();
@@ -188,14 +129,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const mode = body.mode ?? "default";
     const history = (body.history ?? []).slice(-8);
     const anthropic = new Anthropic({ apiKey });
 
     const stream = await anthropic.messages.stream({
       model: "claude-sonnet-4-6",
-      max_tokens: mode === "recruiter" || mode === "test_feature" ? 1200 : 700,
-      system: buildSystemPrompt(mode),
+      max_tokens: 800,
+      system: buildSystemPrompt(),
       messages: [
         ...history.map((m) => ({ role: m.role, content: m.content })),
         { role: "user", content: message },

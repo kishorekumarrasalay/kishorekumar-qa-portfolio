@@ -13,8 +13,6 @@ import {
   Sparkles,
   Mic,
   MicOff,
-  Globe,
-  ChevronDown,
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState, useCallback } from "react";
@@ -27,16 +25,6 @@ import {
 } from "@/lib/qaAssistant";
 
 // ── Types ────────────────────────────────────────────────────────────────────
-
-type ChatMode =
-  | "default"
-  | "recruiter"
-  | "test_feature"
-  | "bug_report"
-  | "interview"
-  | "quiz";
-
-type Language = "en" | "te" | "hi";
 
 interface FeedbackState {
   [msgId: string]: "up" | "down" | null;
@@ -213,36 +201,7 @@ function Toast({ msg, onClose }: { msg: string; onClose: () => void }) {
   );
 }
 
-// Mode pills shown in header
-const MODE_OPTIONS: { id: ChatMode; label: string; desc: string }[] = [
-  { id: "default", label: "💬 Chat", desc: "General Q&A" },
-  { id: "recruiter", label: "📋 Recruiter", desc: "Paste a JD to match skills" },
-  { id: "test_feature", label: "🧪 Test Feature", desc: "Generate test cases" },
-  { id: "bug_report", label: "🐞 Bug Report", desc: "Format a bug report" },
-  { id: "interview", label: "🎤 Interview", desc: "Mock QA interview" },
-  { id: "quiz", label: "🧠 Quiz", desc: "QA knowledge quiz" },
-];
 
-const LANG_OPTIONS: { id: Language; label: string }[] = [
-  { id: "en", label: "EN" },
-  { id: "te", label: "తె" },
-  { id: "hi", label: "हि" },
-];
-
-const LANG_INSTRUCTION: Record<Language, string> = {
-  en: "",
-  te: " Please reply in Telugu (తెలుగు).",
-  hi: " Please reply in Hindi (हिंदी).",
-};
-
-const MODE_PLACEHOLDER: Record<ChatMode, string> = {
-  default: "Ask about Kishore's resume…",
-  recruiter: "Paste the job description here…",
-  test_feature: "Enter a feature to test (e.g. 'login page')…",
-  bug_report: "Describe the bug in plain words…",
-  interview: "Type your answer to the question…",
-  quiz: "Type A, B, C, or D…",
-};
 
 // ── Main Component ───────────────────────────────────────────────────────────
 
@@ -256,9 +215,6 @@ export default function QaAssistant() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<FeedbackState>({});
   const [toast, setToast] = useState<string | null>(null);
-  const [mode, setMode] = useState<ChatMode>("default");
-  const [showModeMenu, setShowModeMenu] = useState(false);
-  const [lang, setLang] = useState<Language>("en");
   const [userMsgCount, setUserMsgCount] = useState(0);
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [leadDismissed, setLeadDismissed] = useState(false);
@@ -400,7 +356,7 @@ export default function QaAssistant() {
       return;
     }
     const rec = new SR();
-    rec.lang = lang === "te" ? "te-IN" : lang === "hi" ? "hi-IN" : "en-US";
+    rec.lang = "en-US";
     rec.continuous = false;
     rec.interimResults = false;
     rec.onresult = (e) => {
@@ -415,18 +371,14 @@ export default function QaAssistant() {
     setIsListening(true);
   };
 
-  const sendMessage = async (text: string, overrideMode?: ChatMode) => {
+  const sendMessage = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || typing) return;
-
-    const effectiveMode = overrideMode ?? mode;
-    const langSuffix = LANG_INSTRUCTION[lang];
-    const finalText = langSuffix ? trimmed + langSuffix : trimmed;
 
     const userMsg: QaMessage = {
       id: crypto.randomUUID(),
       role: "user",
-      text: trimmed, // display original (no lang instruction)
+      text: trimmed,
     };
     setMessages((prev) => [...prev, userMsg]);
     markDone(userMsg.id);
@@ -451,9 +403,8 @@ export default function QaAssistant() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          message: finalText,
+          message: trimmed,
           history,
-          mode: effectiveMode,
         }),
       });
 
@@ -498,9 +449,6 @@ export default function QaAssistant() {
     }, 350);
   };
 
-  const currentModeInfo =
-    MODE_OPTIONS.find((m) => m.id === mode) ?? MODE_OPTIONS[0];
-
   return (
     <>
       {/* ── CHAT WINDOW ── */}
@@ -527,24 +475,6 @@ export default function QaAssistant() {
             </div>
 
             <div className="flex items-center gap-1">
-              {/* Language toggle */}
-              <div className="flex items-center gap-0.5 rounded-lg border border-card-border bg-background px-1 py-0.5">
-                <Globe size={10} className="text-muted" />
-                {LANG_OPTIONS.map((l) => (
-                  <button
-                    key={l.id}
-                    onClick={() => setLang(l.id)}
-                    className={`rounded px-1.5 py-0.5 text-[9px] font-bold transition ${
-                      lang === l.id
-                        ? "bg-primary text-white"
-                        : "text-muted hover:text-foreground"
-                    }`}
-                  >
-                    {l.label}
-                  </button>
-                ))}
-              </div>
-
               {/* TTS toggle */}
               <button
                 type="button"
@@ -571,61 +501,10 @@ export default function QaAssistant() {
             </div>
           </header>
 
-          {/* Mode selector strip */}
-          <div className="relative shrink-0 border-b border-card-border/40 bg-card/80 px-3 py-1.5">
-            <button
-              onClick={() => setShowModeMenu(!showModeMenu)}
-              className="flex items-center gap-1.5 rounded-lg border border-card-border bg-background px-2.5 py-1 text-[11px] font-semibold text-foreground transition hover:border-primary/40"
-            >
-              <span>{currentModeInfo.label}</span>
-              <ChevronDown size={11} className={showModeMenu ? "rotate-180 transition" : "transition"} />
-            </button>
-            {showModeMenu && (
-              <div className="absolute left-3 top-full z-20 mt-1 w-64 rounded-xl border border-card-border bg-card shadow-xl">
-                {MODE_OPTIONS.map((m) => (
-                  <button
-                    key={m.id}
-                    onClick={() => {
-                      setMode(m.id);
-                      setShowModeMenu(false);
-                      if (m.id !== "default") {
-                        const startMsg: QaMessage = {
-                          id: crypto.randomUUID(),
-                          role: "assistant",
-                          text:
-                            m.id === "recruiter"
-                              ? "📋 Recruiter Mode — paste a job description and I'll match Kishore's skills against it."
-                              : m.id === "test_feature"
-                              ? "🧪 Test Feature Mode — enter a feature name and I'll generate test cases."
-                              : m.id === "bug_report"
-                              ? "🐞 Bug Report Mode — describe the bug in plain words and I'll format a professional report."
-                              : m.id === "interview"
-                              ? "🎤 Mock Interview Mode — I'll ask 5 QA questions one at a time. Ready? Let's start!\n\nQ1: What is the difference between Severity and Priority in bug tracking?"
-                              : "🧠 QA Quiz — 5 questions, pick A/B/C/D. Let's go!\n\nQ1: Which testing type verifies that a bug fix hasn't broken other features?\nA) Smoke Testing\nB) Regression Testing\nC) Sanity Testing\nD) UAT",
-                        };
-                        setMessages((prev) => [...prev, startMsg]);
-                      }
-                    }}
-                    className={`flex w-full items-start gap-2 px-3 py-2 text-left text-xs transition hover:bg-primary/10 first:rounded-t-xl last:rounded-b-xl ${
-                      mode === m.id ? "bg-primary/10 text-primary-light font-semibold" : "text-foreground"
-                    }`}
-                  >
-                    <span className="shrink-0 text-[13px]">{m.label.split(" ")[0]}</span>
-                    <div>
-                      <p className="font-semibold">{m.label.slice(2)}</p>
-                      <p className="text-[10px] text-muted">{m.desc}</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
           {/* Messages feed */}
           <div
             ref={listRef}
             className="relative flex-1 min-h-0 overflow-y-auto overscroll-contain px-3.5 py-4 space-y-4"
-            onClick={() => setShowModeMenu(false)}
           >
             {toast && (
               <Toast msg={toast} onClose={() => setToast(null)} />
@@ -851,7 +730,7 @@ export default function QaAssistant() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onFocus={() => setTimeout(scrollToBottom, 150)}
-                placeholder={MODE_PLACEHOLDER[mode]}
+                placeholder="Ask about Kishore's portfolio, skills, projects…"
                 className="flex-1 bg-transparent py-1 pr-1 text-xs sm:text-sm text-foreground outline-none placeholder:text-muted"
               />
               <button

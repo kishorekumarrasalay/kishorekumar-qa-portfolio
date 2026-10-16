@@ -35,8 +35,10 @@ export const SUGGESTIONS: Suggestion[] = [
   { label: "💼 Experience", query: "Tell me about Kishore's experience" },
   { label: "🛠️ Skills", query: "What are Kishore's skills?" },
   { label: "📁 Projects", query: "Show Kishore's projects" },
-  { label: "🐞 Sample Bug Report", query: "Show me a sample bug report" },
-  { label: "📋 Sample Test Cases", query: "Show sample test cases for a login feature" },
+  { label: "🧇 Belgian Waffle", query: "Tell me about the NSO Belgian Waffle project" },
+  { label: "🤖 Automation Framework", query: "Tell me about Kishore's automation projects" },
+  { label: "🎓 Education", query: "What is Kishore's educational background?" },
+  { label: "🏆 Certifications", query: "What certifications does Kishore have?" },
   { label: "🌟 Why Hire Kishore?", query: "Why should I hire Kishore?" },
   { label: "🗺️ Learning Roadmap", query: "What is Kishore's learning roadmap?" },
   { label: "📄 Download Resume", query: "Download resume" },
@@ -70,7 +72,7 @@ export function getWelcomeMessage(): QaMessage {
   return {
     id: "welcome",
     role: "assistant",
-    text: `👋 Hi! I'm Kishore's Assistant.\n\nI can answer questions about:\n✅ Professional Experience   ✅ QA Skills & Tools\n✅ Education & Certifications ✅ Resume & Contact\n\nFeel free to type a query or click any suggestion below!`,
+    text: `👋 Hi! I'm Kishore's Portfolio Assistant.\n\nI can answer questions about:\n✅ Professional Experience   ✅ QA Skills & Tools\n✅ Projects & Automation      ✅ Education & Certifications\n✅ Resume & Contact Details\n\nFeel free to type a question or click any suggestion below!`,
   };
 }
 
@@ -287,6 +289,36 @@ const RESPONSES: Record<string, () => QaMessage> = {
         .join("\n\n")}`,
       { links: [{ label: "View Skills", href: "#skills" }] }
     ),
+  belgianWaffle: () =>
+    reply(
+      `🧇 NSO — Belgian Waffle Supply Chain Management\n\nKishore owns testing across key modules for Belgian Waffle Co.:\n• Modules Tested: Store Creation, Middleware, and Invoice modules — plus Indent and Entries (Local/Company Purchase, Wastage, Return).\n• Testing Types: Functional, Regression, and Sanity testing.\n• Defect Tracking: Meticulous test cases and defect tracking in Google Sheets.\n• Automation: Playwright E2E cart checkout & discount logic validation.`,
+      {
+        links: [
+          { label: "View in Portfolio", href: "#portfolio" },
+          { label: "Try QA Sandbox", href: "#qa-sandbox" },
+        ],
+      }
+    ),
+  hikode: () =>
+    reply(
+      `💼 HiKode Platform Testing & Automation\n\nHiKode is a job application and professional networking platform:\n• Manual Testing: Functional and exploratory testing on the web application.\n• API Testing: Validating endpoints and payload responses with Postman.\n• Automation Framework: Kishore is developing an independent E2E test automation framework using Playwright with TypeScript structured around the Page Object Model (POM).`,
+      {
+        links: [
+          { label: "View in Portfolio", href: "#portfolio" },
+          { label: "HiKode Automation Repo", href: "https://github.com/kishorekumarrasalay/hikode-playwright-automation" },
+        ],
+      }
+    ),
+  metrics: () =>
+    reply(
+      `📊 Kishore's QA Track Record & Metrics:\n\n• 🐞 Bugs Logged: ${KB.stats.bugsLogged}+ documented with clear reproduction steps & severity\n• 📋 Test Cases Written: ${KB.stats.testCasesWritten}+ covering positive, negative, and edge scenarios\n• 🚀 Products Tested: ${KB.stats.productsTested} live commercial web applications (HiKode & NSO Belgian Waffle)\n• ⏳ Experience: ${KB.stats.monthsExperience}+ months of hands-on QA experience at Ratnam Solutions`,
+      {
+        links: [
+          { label: "View Experience", href: "#experience" },
+          { label: "Download Resume", href: KB.resumeHref, download: true },
+        ],
+      }
+    ),
   sampleBugReport: () =>
     reply(
       `🐞 Sample Bug Report\n\n**Bug ID:** BUG-042\n**Title:** Login fails with valid credentials on Safari\n\n**Description:**\nThe login form does not authenticate users with valid email/password on Safari v17.\n\n**Steps to Reproduce:**\n1. Open the app on Safari browser\n2. Enter a valid registered email\n3. Enter the correct password\n4. Click the 'Sign In' button\n\n**Expected Result:** User is redirected to the dashboard\n**Actual Result:** Page refreshes — no error shown, user not logged in\n\n**Severity:** High\n**Priority:** P1\n**Environment:** Safari 17.0, macOS Ventura 13.5\n**Reporter:** Kishore Kumar\n**Status:** Open`,
@@ -315,7 +347,9 @@ const INTENTS: Intent[] = [
     phrases: ["manual testing"],
     keywords: ["manual", "functional", "regression", "smoke", "sanity", "exploratory"],
   },
-
+  { id: "belgianWaffle", phrases: ["belgian waffle", "nso", "supply chain"], keywords: ["waffle", "nso"] },
+  { id: "hikode", phrases: ["hikode", "job application platform"], keywords: ["hikode"] },
+  { id: "metrics", phrases: ["how many bugs", "track record", "statistics", "bugs logged", "test cases written", "stats"], keywords: ["metrics", "stats", "statistics", "numbers"] },
   { id: "jira", keywords: ["jira", "bug", "bugs", "defect", "defects", "ticket", "kanban"] },
   {
     id: "skills",
