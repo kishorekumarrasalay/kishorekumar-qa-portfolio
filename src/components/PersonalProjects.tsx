@@ -70,29 +70,49 @@ export default function PersonalProjects() {
                   </p>
                 </div>
 
-                {"progressTitle" in project && project.progressTitle && (
-                  <div className="mt-8">
-                    <h4 className="font-heading text-lg font-bold">
-                      {project.progressTitle}
-                    </h4>
-                    {"progress" in project && project.progress && (
+                {/*
+                  Progress block is hidden until real values are provided.
+                  When ready, set non-null values in src/data/portfolio.ts for:
+                  - test cases automated (number)
+                  - workflows covered (string)
+                  - last updated (string)
+                */}
+                {"progressTitle" in project &&
+                  project.progressTitle &&
+                  "progress" in project &&
+                  project.progress &&
+                  (project.progress as Record<string, unknown>).testCasesAutomated != null &&
+                  (project.progress as Record<string, unknown>).workflowsCovered != null &&
+                  (project.progress as Record<string, unknown>).lastUpdated != null && (
+                    <div className="mt-8">
+                      <h4 className="font-heading text-lg font-bold">
+                        {project.progressTitle}
+                      </h4>
                       <ul className="text-body mt-4 space-y-1 text-sm text-muted md:text-base">
                         <li className="flex gap-2">
                           <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                          <span>Test cases automated: {(project.progress as { testCasesAutomated: number | null }).testCasesAutomated ?? "[TODO]"}</span>
+                          <span>
+                            Test cases automated:{" "}
+                            {String((project.progress as Record<string, unknown>).testCasesAutomated)}
+                          </span>
                         </li>
                         <li className="flex gap-2">
                           <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                          <span>Workflows covered: {(project.progress as { workflowsCovered: string | null }).workflowsCovered ?? "[TODO]"}</span>
+                          <span>
+                            Workflows covered:{" "}
+                            {String((project.progress as Record<string, unknown>).workflowsCovered)}
+                          </span>
                         </li>
                         <li className="flex gap-2">
                           <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                          <span>Last updated: {(project.progress as { lastUpdated: string | null }).lastUpdated ?? "[TODO]"}</span>
+                          <span>
+                            Last updated:{" "}
+                            {String((project.progress as Record<string, unknown>).lastUpdated)}
+                          </span>
                         </li>
                       </ul>
-                    )}
-                  </div>
-                )}
+                    </div>
+                  )}
 
                 <div className="mt-8">
                   <h4 className="font-heading text-lg font-bold">

@@ -66,8 +66,6 @@ export const portfolioData = {
     bio: "I test web applications at Ratnam Solutions Private Limited, including HiKode and NSO Belgian Waffle, covering functional, regression, smoke, sanity and exploratory testing. I log and track defects in Google Sheets and test REST APIs with Postman. I am building Playwright + TypeScript automation skills through a personal project to grow into an SDET role.",
     roleCycle: [
       "Quality Analyst",
-      "Manual Tester",
-      "Aspiring SDET",
     ],
     typewriterLines: [
       "Testing... ✓ Passed",
@@ -308,10 +306,15 @@ export const portfolioData = {
         currentFocus:
           "Actively adding new test cases, refining the framework structure, and improving reusability of components.",
         progressTitle: "Progress",
+        // [TODO: To show the Progress block, provide real non-null values below:
+        //  - testCasesAutomated: number of test cases automated (e.g. 25)
+        //  - workflowsCovered: workflows covered (e.g. "Login, Registration, Job Search")
+        //  - lastUpdated: last updated date (e.g. "October 2026")
+        // The block is automatically hidden while any of these values remain null]
         progress: {
-          testCasesAutomated: null, // [TODO: fill in actual number]
-          workflowsCovered: null,   // [TODO: fill in actual workflows]
-          lastUpdated: null,        // [TODO: fill in last update date]
+          testCasesAutomated: null as number | null, // test cases automated (add number here)
+          workflowsCovered: null as string | null,   // workflows covered (add string here)
+          lastUpdated: null as string | null,        // last updated (add string here)
         },
         techStackTitle: "Tech Stack",
         techStack: [

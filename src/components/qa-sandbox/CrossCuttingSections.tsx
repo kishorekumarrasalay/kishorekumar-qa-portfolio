@@ -16,6 +16,7 @@ import {
   type DefectItem,
   QA_TIMELINE_STAGES,
   MODULE_COVERAGE_DATA,
+  INITIAL_BUGS,
 } from "@/data/qa-lab";
 
 interface CrossCuttingSectionsProps {
@@ -25,20 +26,21 @@ interface CrossCuttingSectionsProps {
 export default function CrossCuttingSections({ defects }: CrossCuttingSectionsProps) {
   const [selectedTimelineStep, setSelectedTimelineStep] = useState(1);
 
-  // Compute metrics dynamically from shared defect state
-  const totalDefects = defects.length;
-  const criticalCount = defects.filter((d) => d.severity === "Critical").length;
-  const highCount = defects.filter((d) => d.severity === "High").length;
-  const mediumCount = defects.filter((d) => d.severity === "Medium").length;
-  const lowCount = defects.filter((d) => d.severity === "Low").length;
+  // Compute metrics dynamically from the 5 bugs in /data/qa-lab.ts (or active defect state)
+  const bugList = defects && defects.length > 0 ? defects : INITIAL_BUGS;
+  const totalDefects = bugList.length;
+  const criticalCount = bugList.filter((d) => d.severity === "Critical").length;
+  const highCount = bugList.filter((d) => d.severity === "High").length;
+  const mediumCount = bugList.filter((d) => d.severity === "Medium").length;
+  const lowCount = bugList.filter((d) => d.severity === "Low").length;
 
-  const resolvedOrClosed = defects.filter(
+  const resolvedOrClosed = bugList.filter(
     (d) => d.status === "Fixed" || d.status === "Retested" || d.status === "Closed"
   ).length;
 
   // Module bug counts
   const moduleCounts: Record<string, number> = {};
-  defects.forEach((d) => {
+  bugList.forEach((d) => {
     moduleCounts[d.module] = (moduleCounts[d.module] || 0) + 1;
   });
 
@@ -56,7 +58,7 @@ export default function CrossCuttingSections({ defects }: CrossCuttingSectionsPr
             <div className="flex items-center gap-2">
               <Clock size={18} className="text-cyan-400" />
               <h4 className="font-heading text-base sm:text-lg font-bold text-foreground">
-                A Day in My End-to-End QA Workflow
+                A Day in My QA Workflow
               </h4>
             </div>
             <p className="text-xs text-muted mt-0.5">
@@ -112,6 +114,7 @@ export default function CrossCuttingSections({ defects }: CrossCuttingSectionsPr
           </div>
 
           <div className="md:col-span-4 border-t md:border-t-0 md:border-l border-card-border/60 pt-3 md:pt-0 md:pl-5 space-y-2">
+            {/* Tools displayed: only confirmed tools used (Google Sheets, Postman). Removed: Jira, Confluence, Notion, Loom, Slack */}
             <span className="text-[11px] font-bold text-muted uppercase tracking-wider block">
               Tools Used:
             </span>
