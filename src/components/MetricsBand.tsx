@@ -46,8 +46,9 @@ export default function MetricsBand() {
                   durationMs={1100}
                 />
               ) : (
+                /* SSR-safe: show real final value so crawlers see correct numbers */
                 <span>
-                  {item.prefix ?? ""}0{item.suffix ?? ""}
+                  {item.prefix ?? ""}{item.value}{item.suffix ?? ""}
                 </span>
               )}
             </p>

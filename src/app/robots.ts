@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://kishorekumarrasalay.dev/sitemap.xml",
+    sitemap: "https://kishorekumarrasalay-02.vercel.app/sitemap.xml",
   };
 }

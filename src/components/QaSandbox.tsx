@@ -49,7 +49,7 @@ export default function QaSandbox() {
           </div>
 
           <p className="text-body max-w-2xl text-sm text-muted sm:text-base mt-2">
-            Hands-on QA engineering environment modeled after Kishore&apos;s real-world testing on NSO (Belgian Waffle) and HiKode. Hunt simulated defects, run automated API & Playwright test suites, and explore test case traceability.
+            Hands-on QA engineering environment modeled after my testing on NSO (Belgian Waffle) and HiKode. Hunt simulated defects, run automated API & Playwright test suites, and explore test case traceability.
           </p>
         </div>
 

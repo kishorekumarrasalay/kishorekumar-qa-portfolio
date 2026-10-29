@@ -70,6 +70,30 @@ export default function PersonalProjects() {
                   </p>
                 </div>
 
+                {"progressTitle" in project && project.progressTitle && (
+                  <div className="mt-8">
+                    <h4 className="font-heading text-lg font-bold">
+                      {project.progressTitle}
+                    </h4>
+                    {"progress" in project && project.progress && (
+                      <ul className="text-body mt-4 space-y-1 text-sm text-muted md:text-base">
+                        <li className="flex gap-2">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                          <span>Test cases automated: {(project.progress as { testCasesAutomated: number | null }).testCasesAutomated ?? "[TODO]"}</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                          <span>Workflows covered: {(project.progress as { workflowsCovered: string | null }).workflowsCovered ?? "[TODO]"}</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                          <span>Last updated: {(project.progress as { lastUpdated: string | null }).lastUpdated ?? "[TODO]"}</span>
+                        </li>
+                      </ul>
+                    )}
+                  </div>
+                )}
+
                 <div className="mt-8">
                   <h4 className="font-heading text-lg font-bold">
                     {project.techStackTitle}

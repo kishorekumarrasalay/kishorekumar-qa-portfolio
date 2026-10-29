@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllCaseStudySlugs } from "@/data/caseStudies";
 
-const base = "https://kishorekumarrasalay.dev";
+const base = "https://kishorekumarrasalay-02.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const projectUrls = getAllCaseStudySlugs().map((slug) => ({

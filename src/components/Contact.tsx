@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Copy, Mail } from "lucide-react";
+import { Check, Copy, Eye, Mail } from "lucide-react";
 import { useState } from "react";
 import MagneticButton from "./MagneticButton";
 import MotionReveal from "./MotionReveal";
@@ -50,6 +50,7 @@ function IPhoneCardIcon() {
 export default function Contact() {
   const { contact, social } = portfolioData;
   const [copied, setCopied] = useState(false);
+  const [phoneRevealed, setPhoneRevealed] = useState(false);
 
   const copyEmail = async () => {
     try {
@@ -101,6 +102,8 @@ export default function Contact() {
 
         <MotionStagger className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 lg:grid-cols-5 [&>*]:min-w-0">
           {contact.items.map((item) => {
+            const isPhone = item.type === "phone";
+
             const content = (
               <>
                 <span className="contact-card-edge" aria-hidden />
@@ -110,7 +113,22 @@ export default function Contact() {
                 <p className="text-xs font-semibold tracking-wide text-muted uppercase transition-colors duration-300 group-hover:text-primary-light">
                   {item.label}
                 </p>
-                <p className={valueClass(item.type)}>{item.value}</p>
+                {isPhone ? (
+                  phoneRevealed ? (
+                    <p className={valueClass(item.type)}>{item.value}</p>
+                  ) : (
+                    <button
+                      onClick={() => setPhoneRevealed(true)}
+                      className="mt-2 flex items-center gap-1 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-[10px] font-semibold text-primary transition hover:bg-primary/20"
+                      aria-label="Show phone number"
+                    >
+                      <Eye size={11} />
+                      Show number
+                    </button>
+                  )
+                ) : (
+                  <p className={valueClass(item.type)}>{item.value}</p>
+                )}
               </>
             );
 
@@ -120,7 +138,7 @@ export default function Contact() {
                 variant="fadeUp"
                 className="h-full"
               >
-                {item.href ? (
+                {item.href && !(isPhone && !phoneRevealed) ? (
                   <a
                     href={item.href}
                     target={

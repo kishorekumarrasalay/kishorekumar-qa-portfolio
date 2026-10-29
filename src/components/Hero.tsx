@@ -61,6 +61,15 @@ export default function Hero() {
           <RoleCycler />
         </motion.div>
 
+        <motion.p
+          className="mt-1.5 text-xs font-medium tracking-wide text-muted sm:text-sm"
+          initial={enter}
+          animate={visible}
+          transition={{ ...transition, delay: reduce ? 0 : 0.2 }}
+        >
+          {hero.tagline}
+        </motion.p>
+
         <motion.div
           className="mt-4 sm:mt-5"
           initial={enter}

@@ -15,6 +15,7 @@
  * =============================================================================
  */
 
+/** Returns the number of months since the given start date (default: first day as intern). */
 export function getMonthsExperience(startDateStr = "2026-03-18"): number {
   const start = new Date(startDateStr);
   const now = new Date();
@@ -31,9 +32,9 @@ export const portfolioData = {
     profileImage: "/profile.jpg",
     copyrightYear: 2026,
     meta: {
-      title: "Kishore Kumar — Quality Analyst",
+      title: "Kishore Kumar | Manual QA Tester & Aspiring SDET | Hyderabad",
       description:
-        "Quality Analyst portfolio — manual testing, API testing, and automation toward an SDET role.",
+        "Manual QA Tester in Hyderabad. Functional, regression and API testing with Postman. Building Playwright + TypeScript automation toward an SDET role.",
     },
   },
 
@@ -61,7 +62,8 @@ export const portfolioData = {
 
   // ----- Home / Hero section -----
   hero: {
-    bio: "Quality Analyst with 6 months of hands-on experience in manual testing, specializing in functional, regression, smoke, sanity, and exploratory testing. Currently testing the NSO Belgian Waffle Supply Chain Management application and the Hikode job application at Ratnam Solutions Private Limited. Continuously enhancing my skills in REST API testing, Playwright, and TypeScript to build scalable automation solutions and advance toward an SDET role.",
+    tagline: "Manual Tester | API Testing | Moving toward SDET",
+    bio: "I test web applications at Ratnam Solutions Private Limited, including HiKode and NSO Belgian Waffle, covering functional, regression, smoke, sanity and exploratory testing. I log and track defects in Google Sheets and test REST APIs with Postman. I am building Playwright + TypeScript automation skills through a personal project to grow into an SDET role.",
     roleCycle: [
       "Quality Analyst",
       "Manual Tester",
@@ -74,13 +76,14 @@ export const portfolioData = {
     ],
   },
 
-  // ----- Metrics band (below hero) — edit values here -----
+  // ----- Metrics band (below hero) — computed dynamically where needed -----
   metrics: {
     items: [
       { label: "Bugs logged", value: 120, suffix: "+", prefix: "" },
       { label: "Test cases written", value: 350, suffix: "+", prefix: "" },
       { label: "Products tested", value: 2, suffix: "", prefix: "" },
-      { label: "Months experience", value: 6, suffix: "+", prefix: "" },
+      // NOTE: "Months experience" is rendered from getMonthsExperience() in MetricsBand
+      { label: "Months experience", value: getMonthsExperience("2026-03-18"), suffix: "+", prefix: "" },
     ],
   },
 
@@ -90,8 +93,7 @@ export const portfolioData = {
     whoIAm: {
       title: "Who I Am",
       paragraphs: [
-        "I began my QA journey as an intern and grew into a full-time Quality Analyst role, now contributing across two web applications with 6 months of hands-on experience. I specialize in manual testing — functional, regression, smoke, sanity, and exploratory — combined with structured bug tracking in Google Sheets and clear test documentation.",
-        "I'm actively expanding my skill set into API testing with Postman and automation with Playwright and TypeScript, working toward a long-term goal of becoming an SDET.",
+        "I started my QA journey as an intern in March 2026 and moved into a full-time Quality Analyst role in June 2026. Day to day I run functional, regression, smoke, sanity and exploratory tests, write clear test cases, and report reproducible bugs. I test APIs manually with Postman and I am learning Playwright with TypeScript so I can automate the checks I run by hand.",
       ],
     },
     downloads: [
@@ -110,12 +112,11 @@ export const portfolioData = {
     },
     coreCompetenciesTitle: "Core Competencies",
     coreCompetencies: [
-      "Attention to Detail",
-      "Bug Analysis",
-      "Test Documentation",
-      "Problem Solving",
-      "Team Collaboration",
-      "Continuous Learning",
+      "Clear, reproducible bug reports",
+      "Test case design: positive, negative and boundary",
+      "Exploratory testing of web workflows",
+      "Manual REST API testing with Postman",
+      "Defect lifecycle tracking in Google Sheets",
     ],
   },
 
@@ -129,25 +130,31 @@ export const portfolioData = {
           title: "Quality Analyst (Full-Time)",
           company: "Ratnam Solutions Private Limited",
           period: "Jun 2026 – Present",
-          description:
-            "Performing manual testing (functional, regression, smoke, sanity, exploratory) and API testing across HiKode and NSO — Belgian Waffle — web platforms. Managing bug tracking and test documentation in Google Sheets.",
+          bullets: [
+            "Perform functional, regression, smoke, sanity and exploratory testing on HiKode and NSO Belgian Waffle web platforms.",
+            "Test REST APIs manually using Postman.",
+            "Write test cases and track defects and test documentation in Google Sheets.",
+            // [TODO: add one real, measurable result here — e.g. "Reduced critical escapes by X% over N sprints"]
+          ],
+          description: "",
         },
         {
           title: "Quality Analyst Intern",
           company: "Ratnam Solutions Private Limited",
           period: "Mar 2026 – Jun 2026",
+          bullets: [],
           description:
             "Learned core QA fundamentals including SDLC/STLC, test case writing, and defect lifecycle management while contributing to web application testing.",
         },
       ],
     },
     certifications: {
-      title: "Certifications",
+      title: "Certifications & Currently Learning",
       description:
-        "Actively upskilling in API testing with Postman, test automation with Playwright and TypeScript, and Generative AI for software testing.",
+        "Actively upskilling in Playwright with TypeScript automation, API testing with Postman, and Generative AI for software testing.",
       tags: [
-        "API Testing with Postman",
         "Playwright with TypeScript",
+        "API Testing with Postman",
         "Generative AI for Software Testing",
       ],
       items: [
@@ -165,88 +172,62 @@ export const portfolioData = {
     },
   },
 
-  // ----- Technical Skills -----
+  // ----- Technical Skills — three honest tiers -----
   skills: {
     sectionTitle: "Technical Skills",
     bentoCards: [
       {
         id: "testing",
-        title: "Testing Expertise",
+        title: "Hands-on — Testing",
         icon: "testing" as const,
         items: [
-          "Manual Testing",
           "Functional Testing",
           "Regression Testing",
           "Smoke Testing",
           "Sanity Testing",
           "Exploratory Testing",
-          "Integration Testing",
-          "System Testing",
-          "UAT Testing",
           "Test Case Design",
           "Bug Reporting",
           "Test Documentation",
-        ],
-      },
-      {
-        id: "programming",
-        title: "Programming",
-        icon: "programming" as const,
-        items: ["TypeScript"],
-      },
-      {
-        id: "api",
-        title: "API & Data Validation",
-        icon: "api" as const,
-        items: [
-          "API Testing",
-          "Postman",
+          "API Testing with Postman",
           "REST APIs",
-          "SOAP APIs",
-          "JSONPath",
-          "JSON Schema Validation",
-          "Authentication Testing",
           "Bearer Token",
-          "OAuth 2.0",
-          "API Keys",
+          "Google Sheets",
+          "Excel",
         ],
       },
       {
         id: "playwright",
-        title: "Playwright Automation",
+        title: "Practicing — Automation",
         icon: "playwright" as const,
         items: [
           "Playwright with TypeScript",
           "Page Object Model (POM)",
-          "Test Automation",
-          "Automated Test Execution",
-          "Locators and Assertions",
-          "Test Reporting",
-        ],
-      },
-      {
-        id: "tools",
-        title: "Tools",
-        icon: "tools" as const,
-        items: [
-          "Jira",
           "Git",
           "GitHub",
           "VS Code",
-          "Google Sheets",
-          "Microsoft Excel",
         ],
       },
       {
         id: "learning",
-        title: "Currently Learning",
+        title: "Learning",
         icon: "learning" as const,
         learning: true,
         items: [
           "Advanced Playwright",
           "Postman API Automation",
-          "Git and GitHub CI/CD",
+          "CI/CD Pipelines",
           "Test Automation Frameworks",
+          "Generative AI for Testing",
+          // Items moved here pending confirmation they were used professionally:
+          // SOAP APIs, OAuth 2.0, JSONPath, JSON Schema Validation, UAT, Jira, API Keys
+          "SOAP APIs",
+          "OAuth 2.0",
+          "JSONPath",
+          "JSON Schema Validation",
+          "UAT Testing",
+          "Jira",
+          "API Keys",
         ],
       },
     ],
@@ -267,8 +248,13 @@ export const portfolioData = {
         title: "NSO — Belgian Waffle",
         slug: "nso-belgian-waffle",
         description:
-          "Supply Chain Management web application for Belgian Waffle Co. Own testing across the Store Creation, Middleware, and Invoice modules — plus Indent and Entries (Local/Company Purchase, Wastage, Return). Functional, regression, and sanity testing with test cases and defect tracking in Google Sheets.",
+          "Supply Chain Management web application for Belgian Waffle Co.",
         tag: "Web",
+        bullets: [
+          "Owned testing across Store Creation, Middleware and Invoice modules.",
+          "Covered Indent and Entries: Local/Company Purchase, Wastage, and Return.",
+          "Functional, regression and sanity testing with defects tracked in Google Sheets.",
+        ],
       },
     ],
   },
@@ -320,7 +306,13 @@ export const portfolioData = {
         why: "While my current role focuses on manual testing (functional, regression, smoke, and exploratory testing across web applications), I wanted to apply automation concepts to a real, practical application rather than just tutorials — so I chose HiKode as my testing ground.",
         currentFocusTitle: "Current Focus",
         currentFocus:
-          "Actively adding new test cases, refining the framework structure, and improving reusability of components. This is an ongoing project, not a finished deliverable.",
+          "Actively adding new test cases, refining the framework structure, and improving reusability of components.",
+        progressTitle: "Progress",
+        progress: {
+          testCasesAutomated: null, // [TODO: fill in actual number]
+          workflowsCovered: null,   // [TODO: fill in actual workflows]
+          lastUpdated: null,        // [TODO: fill in last update date]
+        },
         techStackTitle: "Tech Stack",
         techStack: [
           "Playwright",
@@ -371,7 +363,7 @@ export const portfolioData = {
       },
       {
         label: "Location",
-        value: "Hyderabad Telangana India",
+        value: "Hyderabad, Telangana, India",
         href: null,
         type: "location" as const,
         emoji: "📍",

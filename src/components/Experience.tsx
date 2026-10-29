@@ -36,9 +36,20 @@ export default function Experience() {
                       </span>
                     </div>
                     <p className="mt-1 text-sm text-primary">{job.company}</p>
-                    <p className="text-body mt-3 text-sm text-muted">
-                      {job.description}
-                    </p>
+                    {"bullets" in job && Array.isArray(job.bullets) && job.bullets.length > 0 ? (
+                      <ul className="text-body mt-3 space-y-1.5 text-sm text-muted">
+                        {job.bullets.map((bullet: string) => (
+                          <li key={bullet} className="flex gap-2">
+                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-light" aria-hidden />
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-body mt-3 text-sm text-muted">
+                        {job.description}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>

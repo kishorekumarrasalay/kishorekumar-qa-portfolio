@@ -56,7 +56,7 @@ export default function CrossCuttingSections({ defects }: CrossCuttingSectionsPr
             <div className="flex items-center gap-2">
               <Clock size={18} className="text-cyan-400" />
               <h4 className="font-heading text-base sm:text-lg font-bold text-foreground">
-                A Day in the Life: Kishore&apos;s End-to-End QA Workflow
+                A Day in My End-to-End QA Workflow
               </h4>
             </div>
             <p className="text-xs text-muted mt-0.5">
@@ -217,7 +217,7 @@ export default function CrossCuttingSections({ defects }: CrossCuttingSectionsPr
                 <div key={mod}>
                   <div className="flex justify-between mb-1">
                     <span className="text-foreground truncate max-w-[160px]">{mod}</span>
-                    <span className="font-mono text-cyan-400">{count} bugs</span>
+                    <span className="font-mono text-cyan-400">{count} {count === 1 ? "bug" : "bugs"}</span>
                   </div>
                   <div className="h-1.5 w-full bg-card-border rounded-full overflow-hidden">
                     <div
@@ -244,10 +244,7 @@ export default function CrossCuttingSections({ defects }: CrossCuttingSectionsPr
               </span>
             </div>
 
-            <div className="rounded-lg bg-cyan-500/10 border border-cyan-500/20 p-2.5 text-[11px] text-cyan-300">
-              💡 Zero severe blocker defects in release candidate branch.
             </div>
-          </div>
         </div>
       </div>
     </div>

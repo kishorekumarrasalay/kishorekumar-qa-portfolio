@@ -152,7 +152,7 @@ export default function TabBugHunt({
 
   // Copy QA Score summary
   const handleCopyResult = () => {
-    const text = `🎯 Kishore's QA Bug Hunt: Found ${foundBugsCount} of ${totalProjectBugs} defects in ${timerSeconds}s on ${PROJECTS[activeProject].name}! [Interactive QA Lab - Kishore Kumar Portfolio]`;
+    const text = `🎯 My QA Bug Hunt Score: Found ${foundBugsCount} of ${totalProjectBugs} defect${totalProjectBugs === 1 ? '' : 's'} in ${timerSeconds}s on ${PROJECTS[activeProject].name}! [Interactive QA Lab - Kishore Kumar Portfolio]`;
     navigator.clipboard.writeText(text);
     setResultCopied(true);
     setTimeout(() => setResultCopied(false), 2500);
@@ -292,7 +292,7 @@ export default function TabBugHunt({
           <div className="flex items-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-mono font-bold text-cyan-400">
             <Clock size={13} className="shrink-0" />
             <span>
-              Found <strong className="text-white">{foundBugsCount}</strong> / {totalProjectBugs} bugs ({timerSeconds}s)
+              Found <strong className="text-white">{foundBugsCount}</strong> / {totalProjectBugs} {totalProjectBugs === 1 ? 'bug' : 'bugs'} ({timerSeconds}s)
             </span>
           </div>
 
@@ -611,9 +611,10 @@ export default function TabBugHunt({
                   >
                     <span className="text-muted">GST Tax (5%):</span>
                     <span className="font-mono font-bold text-red-400">
+                      {/* BUG-NSO-04: GST calculated on pre-discount subtotal (₹597.00 x 5% = ₹29.85) instead of discounted amount (expected ₹27.50) */}
                       ₹{((Math.floor(199.99) * nsoQty) * 0.05).toFixed(2)}
                       <span className="text-[10px] text-emerald-400 ml-1.5">
-                        (Expected: ₹{Math.max(0, (Math.floor(199.99) * nsoQty - 50) * 0.05).toFixed(2)})
+                        (Expected: ₹{Math.max(0, (199.99 * nsoQty - 50) * 0.05).toFixed(2)})
                       </span>
                     </span>
                   </div>
@@ -1144,12 +1145,16 @@ export default function TabBugHunt({
                         )}
                       </div>
 
+                    <div className="flex flex-col items-end gap-0.5">
                       <button
                         onClick={() => handleAskSparkAi(bug)}
+                        title="Ask Spark AI for root cause, severity rationale, and test strategy for this defect"
                         className="flex items-center gap-1.5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-1 text-[10px] font-bold text-cyan-400 hover:bg-cyan-500/20 transition"
                       >
                         <Sparkles size={11} /> Ask Spark AI
                       </button>
+                      <span className="text-[9px] text-muted">Explains root cause &amp; test strategy</span>
+                    </div>
                     </div>
                   </div>
                 );

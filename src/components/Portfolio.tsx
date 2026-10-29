@@ -24,9 +24,23 @@ export default function Portfolio() {
                 className="flex h-full flex-col rounded-2xl border border-card-border bg-card p-5 sm:p-6 lg:p-8"
               >
                 <h3 className="font-heading text-xl font-bold">{project.title}</h3>
-                <p className="text-body mt-4 flex-1 text-sm text-muted">
-                  {project.description}
-                </p>
+                {"bullets" in project && Array.isArray(project.bullets) && project.bullets.length > 0 ? (
+                  <>
+                    <p className="text-body mt-4 text-sm text-muted">{project.description}</p>
+                    <ul className="text-body mt-2 flex-1 space-y-1 text-sm text-muted">
+                      {project.bullets.map((b: string) => (
+                        <li key={b} className="flex gap-2">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-light" aria-hidden />
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <p className="text-body mt-4 flex-1 text-sm text-muted">
+                    {project.description}
+                  </p>
+                )}
                 <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                   <Tag>{project.tag}</Tag>
                   <MagneticButton
