@@ -30,7 +30,7 @@ export const portfolioData = {
     role: "Quality Analyst",
     logo: "KK",
     profileImage: "/profile.jpg",
-    copyrightYear: 2026,
+    copyrightYear: 2027,
     meta: {
       title: "Kishore Kumar | Manual QA Tester & Aspiring SDET | Hyderabad",
       description:
@@ -81,7 +81,7 @@ export const portfolioData = {
       { label: "Test cases written", value: 350, suffix: "+", prefix: "" },
       { label: "Products tested", value: 2, suffix: "", prefix: "" },
       // NOTE: "Months experience" is rendered from getMonthsExperience() in MetricsBand
-      { label: "Months experience", value: getMonthsExperience("2026-03-18"), suffix: "+", prefix: "" },
+      { label: "Months experience", value: 10, suffix: "+", prefix: "" },
     ],
   },
 
