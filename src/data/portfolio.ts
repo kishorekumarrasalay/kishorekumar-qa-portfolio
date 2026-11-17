@@ -236,13 +236,6 @@ export const portfolioData = {
     sectionTitle: "Projects",
     projects: [
       {
-        title: "HiKode",
-        slug: "hikode",
-        description:
-          "Job application and professional networking platform. Performed manual and exploratory testing on the web application, with ongoing API testing practice using Postman.",
-        tag: "Web",
-      },
-      {
         title: "NSO — Belgian Waffle",
         slug: "nso-belgian-waffle",
         description:
@@ -253,6 +246,13 @@ export const portfolioData = {
           "Covered Indent and Entries: Local/Company Purchase, Wastage, and Return.",
           "Functional, regression and sanity testing with defects tracked in Google Sheets.",
         ],
+      },
+      {
+        title: "HiKode",
+        slug: "hikode",
+        description:
+          "Job application and professional networking platform. Performed manual and exploratory testing on the web application, with ongoing API testing practice using Postman.",
+        tag: "Web",
       },
     ],
   },

@@ -466,28 +466,12 @@ export default function QaAssistant() {
                   <p className="font-heading text-sm font-bold text-foreground">
                     Spark AI
                   </p>
-                  <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary-light uppercase tracking-wider">
-                    AI QA
-                  </span>
-                </div>
+                  </div>
                 <p className="text-[10px] text-muted">Online</p>
               </div>
             </div>
 
             <div className="flex items-center gap-1">
-              {/* TTS toggle */}
-              <button
-                type="button"
-                onClick={() => setTtsEnabled(!ttsEnabled)}
-                className={`flex h-8 w-8 items-center justify-center rounded-lg transition ${
-                  ttsEnabled
-                    ? "bg-primary/20 text-primary-light"
-                    : "text-muted hover:bg-muted/10 hover:text-foreground"
-                }`}
-                title={ttsEnabled ? "Voice ON" : "Voice OFF"}
-              >
-                {ttsEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
-              </button>
 
               {/* Close */}
               <button

@@ -47,12 +47,12 @@ export const KB = {
 
   certifications:
     "items" in experience.certifications &&
-    Array.isArray(experience.certifications.items)
+      Array.isArray(experience.certifications.items)
       ? experience.certifications.items.map((c) => ({
-          title: c.title,
-          issuer: c.issuer,
-          date: c.date,
-        }))
+        title: c.title,
+        issuer: c.issuer,
+        date: c.date,
+      }))
       : [],
 
   education: {
@@ -99,7 +99,7 @@ export const KB = {
     "Actively open to Quality Analyst and SDET roles. Available for full-time positions in Hyderabad or remote.",
 
   whyHire: [
-    "6+ months of hands-on QA experience across two live products at Ratnam Solutions.",
+    "10+ months of hands-on QA experience across two live products at Ratnam Solutions.",
     `Logged ${metrics.items.find((i) => i.label === "Bugs logged")?.value ?? 120}+ bugs and written ${metrics.items.find((i) => i.label === "Test cases written")?.value ?? 350}+ test cases with clear documentation.`,
     "Fast learner actively building Playwright automation skills toward an SDET career path.",
     "Strong manual testing foundation: functional, regression, smoke, sanity, exploratory, and UAT.",
