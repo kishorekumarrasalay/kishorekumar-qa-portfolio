@@ -78,7 +78,7 @@ export const portfolioData = {
   metrics: {
     items: [
       { label: "Bugs logged", value: 120, suffix: "+", prefix: "" },
-      { label: "Test cases written", value: 350, suffix: "+", prefix: "" },
+      { label: "Test cases written", value: 250, suffix: "+", prefix: "" },
       { label: "Products tested", value: 2, suffix: "", prefix: "" },
       // NOTE: "Months experience" is rendered from getMonthsExperience() in MetricsBand
       { label: "Months experience", value: 10, suffix: "+", prefix: "" },

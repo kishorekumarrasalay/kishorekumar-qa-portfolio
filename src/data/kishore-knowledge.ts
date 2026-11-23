@@ -22,7 +22,7 @@ export const KB = {
   stats: {
     bugsLogged: metrics.items.find((i) => i.label === "Bugs logged")?.value ?? 120,
     testCasesWritten:
-      metrics.items.find((i) => i.label === "Test cases written")?.value ?? 350,
+      metrics.items.find((i) => i.label === "Test cases written")?.value ?? 250,
     productsTested:
       metrics.items.find((i) => i.label === "Products tested")?.value ?? 2,
     monthsExperience:
@@ -100,7 +100,7 @@ export const KB = {
 
   whyHire: [
     "10+ months of hands-on QA experience across two live products at Ratnam Solutions.",
-    `Logged ${metrics.items.find((i) => i.label === "Bugs logged")?.value ?? 120}+ bugs and written ${metrics.items.find((i) => i.label === "Test cases written")?.value ?? 350}+ test cases with clear documentation.`,
+    `Logged ${metrics.items.find((i) => i.label === "Bugs logged")?.value ?? 120}+ bugs and written ${metrics.items.find((i) => i.label === "Test cases written")?.value ?? 250}+ test cases with clear documentation.`,
     "Fast learner actively building Playwright automation skills toward an SDET career path.",
     "Strong manual testing foundation: functional, regression, smoke, sanity, exploratory, and UAT.",
     "Honest about skill gaps — currently learning automation and CI/CD rather than claiming expertise.",
