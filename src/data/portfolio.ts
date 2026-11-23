@@ -100,11 +100,6 @@ export const portfolioData = {
         href: "/cv.pdf",
         openInNewTab: true,
       },
-      {
-        label: "Direct Download",
-        href: "/cv.pdf",
-        download: "Kishore_Kumar_R_Resume.pdf",
-      },
     ],
     education: {
       title: "Education",

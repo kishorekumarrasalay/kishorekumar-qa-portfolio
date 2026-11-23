@@ -33,34 +33,24 @@ export default function About() {
               </div>
 
               <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-4">
-                {about.downloads.map((download, index) => {
-                  const shouldOpenInNewTab = "openInNewTab" in download ? download.openInNewTab : !download.download;
-                  const downloadName = "download" in download && download.download
-                    ? typeof download.download === "string"
-                      ? download.download
-                      : "Kishore_Kumar_R_Resume.pdf"
-                    : undefined;
-
-                  return (
-                    <MagneticButton
-                      key={download.label}
-                      as="a"
-                      href={download.href}
-                      target={shouldOpenInNewTab ? "_blank" : undefined}
-                      rel={shouldOpenInNewTab ? "noopener noreferrer" : undefined}
-                      download={downloadName}
-                      strength={0.3}
-                      className={`w-full items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-medium transition-opacity hover:opacity-90 sm:w-auto inline-flex ${
-                        index === 0
-                          ? "bg-primary text-white"
-                          : "border border-primary text-primary hover:bg-primary/10"
-                      }`}
-                    >
-                      <Download size={16} />
-                      {download.label}
-                    </MagneticButton>
-                  );
-                })}
+                {about.downloads.map((download, index) => (
+                  <MagneticButton
+                    key={download.label}
+                    as="a"
+                    href={download.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    strength={0.3}
+                    className={`w-full items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-medium transition-opacity hover:opacity-90 sm:w-auto inline-flex ${
+                      index === 0
+                        ? "bg-primary text-white"
+                        : "border border-primary text-primary hover:bg-primary/10"
+                    }`}
+                  >
+                    <Download size={16} />
+                    {download.label}
+                  </MagneticButton>
+                ))}
               </div>
             </FloatingCard>
           </MotionItem>
