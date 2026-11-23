@@ -226,18 +226,22 @@ const RESPONSES: Record<string, () => QaMessage> = {
           { label: "📧 Email Me", href: `mailto:${social.email}` },
           { label: "💼 LinkedIn", href: social.linkedin },
           { label: "💻 GitHub", href: social.github },
-          { label: "📄 Download CV", href: about.downloads[0].href, download: true },
+          { label: "📄 Open CV (PDF)", href: "/cv.pdf" },
+          { label: "⬇ Download CV", href: "/cv.pdf", download: true },
         ],
       }
     ),
   resume: () => {
-    const cv = about.downloads[0];
-    return reply(`Certainly! Preparing Kishore's updated resume for download:`, {
-      links: [
-        { label: "⬇ Download CV (PDF)", href: cv.href, download: true },
-        { label: "Go to About Section", href: "#about" },
-      ],
-    });
+    return reply(
+      `Certainly! Here is Kishore Kumar R's resume (Quality Analyst with 6+ months experience at Ratnam Solutions):\n\n📄 **Kishore Kumar R — Quality Analyst Resume**\n• Current Role: Quality Analyst at Ratnam Solutions (Hyderabad)\n• Tested platforms: HiKode & NSO Belgian Waffle\n• Core Skills: Manual Testing, API Testing (Postman), Test Design, JIRA, SQL, Playwright + TS\n\nYou can click below to open the PDF directly in a new tab, or download it immediately to your device:`,
+      {
+        links: [
+          { label: "📄 Open / View CV (PDF)", href: "/cv.pdf" },
+          { label: "⬇ Download CV (PDF)", href: "/cv.pdf", download: true },
+          { label: "Go to About Section", href: "#about" },
+        ],
+      }
+    );
   },
   experience: () => {
     const jobs = experience.work.items
@@ -267,7 +271,8 @@ const RESPONSES: Record<string, () => QaMessage> = {
       `Here's why you should consider Kishore:\n\n${KB.whyHire.map((w) => `• ${w}`).join("\n")}`,
       {
         links: [
-          { label: "📄 Download Resume", href: KB.resumeHref, download: true },
+          { label: "📄 Open CV (PDF)", href: "/cv.pdf" },
+          { label: "⬇ Download CV", href: "/cv.pdf", download: true },
           { label: "📬 Contact", href: "#contact" },
         ],
       }
@@ -315,7 +320,8 @@ const RESPONSES: Record<string, () => QaMessage> = {
       {
         links: [
           { label: "View Experience", href: "#experience" },
-          { label: "Download Resume", href: KB.resumeHref, download: true },
+          { label: "📄 Open CV (PDF)", href: "/cv.pdf" },
+          { label: "⬇ Download CV", href: "/cv.pdf", download: true },
         ],
       }
     ),

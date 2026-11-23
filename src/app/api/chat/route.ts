@@ -91,7 +91,8 @@ ${KB.certifications.length > 0 ? KB.certifications.map((c) => `- ${c.title} by $
 ${KB.whyHire.map((w) => `- ${w}`).join("\n")}
 
 ## Resume / CV
-Resume is available for download at: ${KB.resumeHref}
+Resume is available to view and download at: /cv.pdf
+When asked about Kishore's resume or CV, invite the visitor to open and view the PDF in their browser or download it directly using the buttons provided. Highlight his 6+ months of experience at Ratnam Solutions, testing HiKode and NSO Belgian Waffle, and his transition toward SDET with Playwright.
 `;
 }
 

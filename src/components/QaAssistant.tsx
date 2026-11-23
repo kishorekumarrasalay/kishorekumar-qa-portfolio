@@ -431,6 +431,27 @@ export default function QaAssistant() {
         }
 
         markDone(replyId, full);
+
+        const isResumeRelated =
+          /resume|cv|curriculum\s*vitae/i.test(trimmed) ||
+          /resume|cv\.pdf/i.test(full);
+        if (isResumeRelated) {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === replyId
+                ? {
+                    ...m,
+                    links: [
+                      { label: "📄 Open / View CV (PDF)", href: "/cv.pdf" },
+                      { label: "⬇ Download CV", href: "/cv.pdf", download: true },
+                      { label: "Go to About Section", href: "#about" },
+                    ],
+                  }
+                : m
+            )
+          );
+        }
+
         setMessages((prev) => [...prev, getOutroMessage()]);
         return;
       }
@@ -582,27 +603,36 @@ export default function QaAssistant() {
                     {/* Action links */}
                     {!isUser && isDone && msg.links && msg.links.length > 0 && (
                       <div className="mt-3 flex flex-wrap gap-1.5">
-                        {msg.links.map((link) => (
-                          <a
-                            key={link.label}
-                            href={link.href}
-                            target={
-                              link.href.startsWith("http") ? "_blank" : undefined
-                            }
-                            rel="noopener noreferrer"
-                            download={link.download ? true : undefined}
-                            onClick={() => {
-                              if (link.href.startsWith("#")) {
-                                window.dispatchEvent(
-                                  new CustomEvent("qa-chat-close")
-                                );
+                        {msg.links.map((link) => {
+                          const isPdf = link.href.endsWith(".pdf") || link.href === "/cv.pdf";
+                          const shouldOpenTab = link.href.startsWith("http") || (isPdf && !link.download);
+
+                          return (
+                            <a
+                              key={link.label}
+                              href={link.href}
+                              target={shouldOpenTab ? "_blank" : undefined}
+                              rel={shouldOpenTab ? "noopener noreferrer" : undefined}
+                              download={
+                                link.download
+                                  ? typeof link.download === "string"
+                                    ? link.download
+                                    : "Kishore_Kumar_R_Resume.pdf"
+                                  : undefined
                               }
-                            }}
-                            className="inline-flex rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold text-primary-light transition hover:bg-primary/20"
-                          >
-                            {link.label}
-                          </a>
-                        ))}
+                              onClick={() => {
+                                if (link.href.startsWith("#")) {
+                                  window.dispatchEvent(
+                                    new CustomEvent("qa-chat-close")
+                                  );
+                                }
+                              }}
+                              className="inline-flex rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold text-primary-light transition hover:bg-primary/20"
+                            >
+                              {link.label}
+                            </a>
+                          );
+                        })}
                       </div>
                     )}
 

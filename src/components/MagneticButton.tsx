@@ -14,7 +14,7 @@ interface MagneticButtonProps {
   className?: string;
   as?: "button" | "a" | "div";
   href?: string;
-  download?: boolean;
+  download?: boolean | string;
   type?: "button" | "submit";
   onClick?: () => void;
   "aria-label"?: string;

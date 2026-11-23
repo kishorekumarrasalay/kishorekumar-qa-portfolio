@@ -95,8 +95,16 @@ export const portfolioData = {
       ],
     },
     downloads: [
-      { label: "Download CV", href: "/cv.pdf" },
-      { label: "Download Cover Letter", href: "/cover-letter.pdf" },
+      {
+        label: "Download CV",
+        href: "/cv.pdf",
+        openInNewTab: true,
+      },
+      {
+        label: "Direct Download",
+        href: "/cv.pdf",
+        download: "Kishore_Kumar_R_Resume.pdf",
+      },
     ],
     education: {
       title: "Education",
