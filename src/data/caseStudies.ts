@@ -266,13 +266,13 @@ export const caseStudies: CaseStudy[] = [
       },
     },
     metrics: {
-      bugsFound: 15,
-      testCasesExecuted: 666,
+      bugsFound: 30,
+      testCasesExecuted: 100,
       regressionCycles: 100,
     },
     customMetrics: [
-      { label: "Test cases designed", value: 666 },
-      { label: "Defects logged (14 unique)", value: 15 },
+      { label: "Test cases designed", value: 100 },
+      { label: "Defects logged", value: 30 },
       { label: "Manual game plays", value: "100+" },
     ],
     outcome:
