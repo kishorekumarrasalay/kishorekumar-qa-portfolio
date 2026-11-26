@@ -77,9 +77,9 @@ export const portfolioData = {
   // ----- Metrics band (below hero) — computed dynamically where needed -----
   metrics: {
     items: [
-      { label: "Bugs logged", value: 120, suffix: "+", prefix: "" },
+      { label: "Bugs logged", value: 200, suffix: "+", prefix: "" },
       { label: "Test cases written", value: 250, suffix: "+", prefix: "" },
-      { label: "Products tested", value: 2, suffix: "", prefix: "" },
+      { label: "Products tested", value: 3, suffix: "", prefix: "" },
       // NOTE: "Months experience" is rendered from getMonthsExperience() in MetricsBand
       { label: "Months experience", value: 10, suffix: "+", prefix: "" },
     ],
