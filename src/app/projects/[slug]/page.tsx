@@ -84,7 +84,16 @@ export default async function CaseStudyPage({ params }: Props) {
 
       <section className="mt-10">
         <h2 className="font-heading text-xl font-semibold">Approach</h2>
-        <p className="text-body mt-3 text-sm text-muted">{study.approach.design}</p>
+        {study.approach.design && (
+          <p className="text-body mt-3 text-sm text-muted">{study.approach.design}</p>
+        )}
+        {study.approach.points && study.approach.points.length > 0 && (
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-muted">
+            {study.approach.points.map((point) => (
+              <li key={point}>{point}</li>
+            ))}
+          </ul>
+        )}
         <div className="mt-4 flex flex-wrap gap-2">
           {study.approach.tools.map((tool) => (
             <span
@@ -145,15 +154,17 @@ export default async function CaseStudyPage({ params }: Props) {
           <dl className="mt-4 space-y-3 text-sm">
             <div>
               <dt className="font-medium text-foreground">Steps</dt>
-              <dd className="text-muted">{study.sampleArtifacts.bugReport.steps}</dd>
-            </div>
-            <div>
-              <dt className="font-medium text-foreground">Actual</dt>
-              <dd className="text-muted">{study.sampleArtifacts.bugReport.actual}</dd>
+              <dd className="whitespace-pre-line text-muted">
+                {study.sampleArtifacts.bugReport.steps}
+              </dd>
             </div>
             <div>
               <dt className="font-medium text-foreground">Expected</dt>
               <dd className="text-muted">{study.sampleArtifacts.bugReport.expected}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-foreground">Actual</dt>
+              <dd className="text-muted">{study.sampleArtifacts.bugReport.actual}</dd>
             </div>
           </dl>
         </article>
@@ -161,11 +172,13 @@ export default async function CaseStudyPage({ params }: Props) {
 
       <section className="mt-10">
         <h2 className="font-heading text-xl font-semibold">Metrics</h2>
-        <p className="mt-1 text-xs text-muted">
-          Placeholder values — edit in <code>src/data/caseStudies.ts</code>
-        </p>
+        {!study.customMetrics && (
+          <p className="mt-1 text-xs text-muted">
+            Placeholder values — edit in <code>src/data/caseStudies.ts</code>
+          </p>
+        )}
         <div className="mt-4 grid grid-cols-3 gap-3">
-          {[
+          {(study.customMetrics ?? [
             { label: "Bugs found", value: study.metrics.bugsFound },
             {
               label: "Test cases executed",
@@ -175,7 +188,7 @@ export default async function CaseStudyPage({ params }: Props) {
               label: "Regression cycles",
               value: study.metrics.regressionCycles,
             },
-          ].map((m) => (
+          ]).map((m) => (
             <div
               key={m.label}
               className="rounded-xl border border-card-border bg-card p-4 text-center"

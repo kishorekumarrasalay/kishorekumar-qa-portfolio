@@ -18,6 +18,7 @@ export type CaseStudy = {
   modulesTested?: ModuleTested[];
   approach: {
     design: string;
+    points?: string[];
     tools: string[];
   };
   sampleArtifacts: {
@@ -36,6 +37,7 @@ export type CaseStudy = {
     testCasesExecuted: number;
     regressionCycles: number;
   };
+  customMetrics?: { label: string; value: string | number }[];
   outcome: string;
   learnings: string[];
 };
@@ -179,6 +181,106 @@ export const caseStudies: CaseStudy[] = [
     learnings: [
       "State machines (order status) need explicit transition matrices in test design",
       "Critical severity bugs around stock need immediate regression tagging",
+    ],
+  },
+  {
+    slug: "burger-king-mini-game",
+    title: "Burger King Mini Game",
+    tag: "Web",
+    summary:
+      "Children's promotional web game with manual QA focused on functional, exploratory and child-safety testing.",
+    context: {
+      product:
+        "Burger Storm is a free three-lane runner for children aged 8 to 15, played while waiting for a burger order. Players collect ingredients, dodge obstacles, build burgers and compete on leaderboards across 14 worlds. Because players are children, privacy, parental consent and fair play were as important as the features.",
+      role: "Quality Analyst, covering functional, exploratory, usability and compliance testing, with defects tracked in Google Sheets.",
+    },
+    testingScope: [
+      "Registration, login, secret code and recovery email flows",
+      "Parental consent and privacy settings",
+      "Core gameplay: lives, speed, obstacles, power-ups, scoring and combos",
+      "Worlds, unlocks, weather and daily challenge",
+      "Profile, leaderboard (today, all time, week, worlds) and ranks",
+      "Offline behaviour, performance and compatibility",
+    ],
+    modulesTested: [
+      {
+        name: "Account and Registration",
+        description:
+          "Game name rules, secret code (6 digits), validation, back-button behaviour, duplicate names",
+      },
+      {
+        name: "Recovery and Withdrawal",
+        description:
+          "Recovery email, secret code email, consent withdrawal, 30-day access period, account deletion",
+      },
+      {
+        name: "Parental Consent",
+        description:
+          "Consent screen, privacy notice, optional leaderboard sharing, parent confirmation step",
+      },
+      {
+        name: "Gameplay",
+        description:
+          "Lanes and controls, obstacles, ingredients, burger building, power-ups, speed and scoring rules",
+      },
+      {
+        name: "Profile and Leaderboard",
+        description:
+          "Stats, best score, looks, ranks, city and world boards, search",
+      },
+    ],
+    approach: {
+      design: "",
+      points: [
+        "Read the game mechanics document and listed the rules with numbers.",
+        "Played the game 100+ times and tested each screen on its own.",
+        "Used boundary value, negative and exploratory testing.",
+        "Reviewed child privacy and consent flows.",
+        "Raised requirement gaps with the BA, such as username reuse after deletion and leaderboard behaviour during the 30-day period.",
+      ],
+      tools: ["Google Sheets", "Excel", "Screen recording"],
+    },
+    sampleArtifacts: {
+      testCases: [
+        {
+          id: "BK-REG-002",
+          title: "Username allows only permitted characters",
+          steps: "Enter @#$%^&* as the game name, add a valid code, submit",
+          expected: "Validation error is shown and registration is blocked",
+        },
+        {
+          id: "BK-WDR-003",
+          title: "Leaderboard entry kept during the 30-day period",
+          steps: "Withdraw consent, then open the leaderboard",
+          expected: "Entry stays visible during the 30 days",
+        },
+      ],
+      bugReport: {
+        id: "BK-002",
+        title: "Secret code email is not sent after changing the recovery email",
+        severity: "Critical",
+        steps:
+          "1. Log in to the game\n2. Go to account settings\n3. Change the recovery email\n4. Request the secret code email",
+        expected: "The email is sent to the updated recovery email.",
+        actual: "No secret code email is received.",
+      },
+    },
+    metrics: {
+      bugsFound: 15,
+      testCasesExecuted: 666,
+      regressionCycles: 100,
+    },
+    customMetrics: [
+      { label: "Test cases designed", value: 666 },
+      { label: "Defects logged (14 unique)", value: 15 },
+      { label: "Manual game plays", value: "100+" },
+    ],
+    outcome:
+      "The testing found one Critical and 13 Major defects, mostly in the account, recovery and leaderboard flows.",
+    learnings: [
+      "Child-focused products need extra checks on consent, data removal and clear messages.",
+      "Early requirement questions, such as 12 versus 14 worlds, prevented rework later.",
+      "Short, repeatable steps and video evidence made the defects easy to reproduce.",
     ],
   },
 ];

@@ -239,6 +239,18 @@ export const portfolioData = {
     sectionTitle: "Projects",
     projects: [
       {
+        title: "Burger King Mini Game",
+        slug: "burger-king-mini-game",
+        description:
+          "Children's promotional web game (Burger Storm) played in stores while waiting for an order. Performed manual and exploratory testing across gameplay, registration, parental consent, leaderboards and offline behaviour.",
+        tag: "Web",
+        bullets: [
+          "Owned testing across Account and Registration, Parental Consent, Leaderboard and Gameplay modules.",
+          "Covered 14 worlds, scoring rules, power-ups, daily challenge and the Settings and Privacy screens.",
+          "Functional, exploratory, usability and compliance testing with defects tracked in Google Sheets.",
+        ],
+      },
+      {
         title: "NSO — Belgian Waffle",
         slug: "nso-belgian-waffle",
         description:
